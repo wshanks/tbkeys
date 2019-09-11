@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "applications": {
+    "gecko": {
+      "id": "tbkeys@addons.thunderbird.net",
+      "strict_min_version": "68.0"
+    }
+  },
+  "name": "tbkeys",
+  "description": "Custom Thunderbird keybindings",
+  "author": "WS",
+  "version": "0.0.1",
+  "legacy": {
+    "type": "bootstrap"
+  }
+}

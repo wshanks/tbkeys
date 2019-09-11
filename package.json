@@ -1,0 +1,26 @@
+{
+  "name": "tbkeys",
+  "version": "0.0.1",
+  "description": "Thunderbird keys",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "eslint addon/*.js addon/content/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/willsALMANJ/tbkeys.git"
+  },
+  "keywords": [],
+  "author": "Will Shanks",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/willsALMANJ/tbkeys/issues"
+  },
+  "homepage": "https://github.com/willsALMANJ/tbkeys#readme",
+  "devDependencies": {
+    "eslint": "^6.1.0"
+  }
+}
