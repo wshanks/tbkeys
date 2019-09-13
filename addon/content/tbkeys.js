@@ -95,6 +95,13 @@ var TBKeys = {
     },
 
     bindKeys: function(window) {
+        window.Mousetrap.prototype.stopCallback = function(e, element, _combo) {
+            return (
+                element.tagName == 'textbox' || element.tagName == 'INPUT' ||
+                element.tagName == 'SELECT' || element.tagName == 'TEXTAREA' ||
+                (element.contentEditable && element.contentEditable == 'true')
+            )
+        }
         window.Mousetrap.reset()
         this.bindKey(window, "j", "window.goDoCommand('cmd_nextMsg')")
         this.bindKey(window, "k", "window.goDoCommand('cmd_previousMsg')")
