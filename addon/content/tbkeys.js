@@ -96,9 +96,10 @@ var TBKeys = {
 
     bindKeys: function(window) {
         window.Mousetrap.prototype.stopCallback = function(e, element, _combo) {
+            let tagName = element.tagName.toLowerCase()
             return (
-                element.tagName == 'textbox' || element.tagName == 'INPUT' ||
-                element.tagName == 'SELECT' || element.tagName == 'TEXTAREA' ||
+                tagName == 'textbox' || tagName == 'input' ||
+                tagName == 'select' || tagName == 'textarea' ||
                 (element.contentEditable && element.contentEditable == 'true')
             )
         }
