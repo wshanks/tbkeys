@@ -104,25 +104,22 @@ var TBKeys = {
             )
         }
         window.Mousetrap.reset()
-        // this.bindKey(window, "j", "window.goDoCommand('cmd_nextMsg')")
-        // this.bindKey(window, "k", "window.goDoCommand('cmd_previousMsg')")
-        // this.bindKey(window, "o", "window.goDoCommand('cmd_openMessage')")
-        // this.bindKey(window, "f", "window.goDoCommand('cmd_forward')")
-        // this.bindKey(window, "#", "window.goDoCommand('cmd_delete')")
+        this.bindKey(window, "j", "window.goDoCommand('cmd_nextMsg')")
+        this.bindKey(window, "k", "window.goDoCommand('cmd_previousMsg')")
+        this.bindKey(window, "o", "window.goDoCommand('cmd_openMessage')")
+        this.bindKey(window, "f", "window.goDoCommand('cmd_forward')")
+        this.bindKey(window, "#", "window.goDoCommand('cmd_delete')")
         this.bindKey(window, "r", "window.goDoCommand('cmd_reply')")
-        this.bindKey(window, "shift+r", "window.goDoCommand('cmd_replyall')")
-        // this.bindKey(window, "x", "window.goDoCommand('cmd_archive')")
-        //this.bindKey(window, "c", "window.MsgNewMessage()")
-        this.bindKey(window, "l", "window.goDoCommand('cmd_toggleFolderPane')")
-
-
-        /*this.bindKey(window, "u", `
+        this.bindKey(window, "a", "window.goDoCommand('cmd_replyall')")
+        this.bindKey(window, "x", "window.goDoCommand('cmd_archive')")
+        this.bindKey(window, "c", "window.MsgNewMessage()")
+        this.bindKey(window, "u", `
             if (((window.document.activeElement.id == 'messagepane') || (window.document.activeElement == 'threadTree' )) && (window.document.getElementById('tabmail').tabContainer.selectedIndex!=0)){
             window.CloseTabOrWindow()
         }
 
         window.goDoCommand('cmd_getMsgsForAuthAccounts')
         window.goDoCommand('cmd_expandAllThreads')
-        `)*/
+        `)
     }
 }
