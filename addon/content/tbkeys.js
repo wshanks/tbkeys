@@ -11,18 +11,18 @@ var EXPORTED_SYMBOLS = ['TBKeys']
 var { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
 var { OS }  = ChromeUtils.import("resource://gre/modules/osfile.jsm")
 
-var defaultKeys = `{
-"j": "window.goDoCommand('cmd_nextMsg')",
-"k": "window.goDoCommand('cmd_previousMsg')",
-"o": "window.goDoCommand('cmd_openMessage')",
-"f": "window.goDoCommand('cmd_forward')",
-"#": "window.goDoCommand('cmd_delete')",
-"r": "window.goDoCommand('cmd_reply')",
-"a": "window.goDoCommand('cmd_replyall')",
-"x": "window.goDoCommand('cmd_archive')",
-"c": "window.MsgNewMessage()",
-"u": "if (((window.document.activeElement.id == 'messagepane') || (window.document.activeElement == 'threadTree' )) && (window.document.getElementById('tabmail').tabContainer.selectedIndex!=0)){ window.CloseTabOrWindow()}; window.goDoCommand('cmd_getMsgsForAuthAccounts'); window.goDoCommand('cmd_expandAllThreads')"
-}`
+// var defaultKeys = `{
+// "j": "window.goDoCommand('cmd_nextMsg')",
+// "k": "window.goDoCommand('cmd_previousMsg')",
+// "o": "window.goDoCommand('cmd_openMessage')",
+// "f": "window.goDoCommand('cmd_forward')",
+// "#": "window.goDoCommand('cmd_delete')",
+// "r": "window.goDoCommand('cmd_reply')",
+// "a": "window.goDoCommand('cmd_replyall')",
+// "x": "window.goDoCommand('cmd_archive')",
+// "c": "window.MsgNewMessage()",
+// "u": "if (((window.document.activeElement.id == 'messagepane') || (window.document.activeElement == 'threadTree' )) && (window.document.getElementById('tabmail').tabContainer.selectedIndex!=0)){ window.CloseTabOrWindow()}; window.goDoCommand('cmd_getMsgsForAuthAccounts'); window.goDoCommand('cmd_expandAllThreads')"
+// }`
 
 
 /**
@@ -58,11 +58,13 @@ var TBKeys = {
             }
         }
 
-        let text = defaultKeys
+        let text
         try {
             text = await OS.File.read(key_file, {encoding: "utf-8"})
         } catch (error) {
-            Services.console.logStringMessage("tbkeys: falling back to default keybindings.")
+            Services.console.logStringMessage("tbkeys: using default keybindings.")
+            let response = await fetch("chrome://tbkeys/content/tbkeys.json")
+            text = await response.text()
         }
 
         try {

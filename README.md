@@ -30,20 +30,6 @@ keybindings file can be specified by setting the `extensions.tbkeys.key_file`
 preference in `about:config`.
 
 Note that if the `.tbkeys.json` file exists it overrides all of the default
-keybindings. The content of the default keybindings is provided below and can
-be used a starting point for creating a custom `.tbkeys.json` file:
-
-```
-{
-"j": "window.goDoCommand('cmd_nextMsg')",
-"k": "window.goDoCommand('cmd_previousMsg')",
-"o": "window.goDoCommand('cmd_openMessage')",
-"f": "window.goDoCommand('cmd_forward')",
-"#": "window.goDoCommand('cmd_delete')",
-"r": "window.goDoCommand('cmd_reply')",
-"a": "window.goDoCommand('cmd_replyall')",
-"x": "window.goDoCommand('cmd_archive')",
-"c": "window.MsgNewMessage()",
-"u": "if (((window.document.activeElement.id == 'messagepane') || (window.document.activeElement == 'threadTree' )) && (window.document.getElementById('tabmail').tabContainer.selectedIndex!=0)){ window.CloseTabOrWindow()}; window.goDoCommand('cmd_getMsgsForAuthAccounts'); window.goDoCommand('cmd_expandAllThreads')"
-}
-```
+keybindings. The content of the default keybindings can be found in
+[addon/content/tbkeys.json](addon/content/tbkeys.json) and can be used as a
+starting point for creating a custom `.tbkeys.json` file.
