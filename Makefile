@@ -9,7 +9,7 @@ xpi: $(BLDDIR)/tbkeys.xpi
 
 $(BLDDIR)/tbkeys.xpi:
 	@mkdir -p $(dir $@)
-	cd addon; zip -FSr $(ABS_BLDDIR)/tbkeys.xpi * -x \*.swp -x '#*#' -x \*~
+	cd addon; zip -FSr $(ABS_BLDDIR)/tbkeys.xpi * -x '*.swp' -x '#*#' -x '*~'
 
 clean:
 	rm -f $(BLDDIR)/tbkeys.xpi
