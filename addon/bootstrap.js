@@ -25,6 +25,8 @@ function shutdown(data, reason) {
         return;
     }
 
+    var { TBKeys } = ChromeUtils.import("chrome://tbkeys/content/tbkeys.js");
+
     TBKeys.cleanup();
     Cu.unload("chrome://tbkeys/content/tbkeys.js");
 }
