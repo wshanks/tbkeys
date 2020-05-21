@@ -9,7 +9,7 @@
   "name": "tbkeys",
   "description": "Custom Thunderbird keybindings",
   "author": "WS",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "legacy": {
     "type": "bootstrap"
   }

@@ -2,13 +2,11 @@
 
 `tbkeys` is a bootstrapped extension for Thunderbird that uses
 [Mousetrap](https://craig.is/killing/mice) to bind key sequences to custom
-commands. Currently, it supports no customization and has hard-coded
-keybindings similar to the ones available in Google's GMail web app.
-[dorando-keyconfig](https://github.com/trlkly/dorando-keyconfig) is an example
-of an extension that allows custom keybindings and supports customization but
-does not currently work with Thunderbird 68.
+commands.
 
-## Current keybindings
+## Default keybindings
+
+The default keybindings are modeled on GMail's keybindings.
 
 | Key | Function |
 | --- | -------- |
@@ -22,3 +20,16 @@ does not currently work with Thunderbird 68.
 |  k  | Previous message |
 |  o  | Open message |
 |  x  | Archive message |
+
+## Customizing keybindings
+
+To customize keybindings, create a file named `~/.tbkeys.json` (`_tbkeys.json`
+in the home directory on Windows) containing a JSON object mapping keybindings
+(with Mousetrap syntax) to javascript code to execute. A custom path to the
+keybindings file can be specified by setting the `extensions.tbkeys.key_file`
+preference in `about:config`.
+
+Note that if the `.tbkeys.json` file exists it overrides all of the default
+keybindings. The content of the default keybindings can be found in
+[addon/content/tbkeys.json](addon/content/tbkeys.json) and can be used as a
+starting point for creating a custom `.tbkeys.json` file.

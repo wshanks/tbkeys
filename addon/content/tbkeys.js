@@ -9,6 +9,21 @@
 var EXPORTED_SYMBOLS = ['TBKeys']
 
 var { Services } = ChromeUtils.import('resource://gre/modules/Services.jsm')
+var { OS }  = ChromeUtils.import("resource://gre/modules/osfile.jsm")
+
+// var defaultKeys = `{
+// "j": "window.goDoCommand('cmd_nextMsg')",
+// "k": "window.goDoCommand('cmd_previousMsg')",
+// "o": "window.goDoCommand('cmd_openMessage')",
+// "f": "window.goDoCommand('cmd_forward')",
+// "#": "window.goDoCommand('cmd_delete')",
+// "r": "window.goDoCommand('cmd_reply')",
+// "a": "window.goDoCommand('cmd_replyall')",
+// "x": "window.goDoCommand('cmd_archive')",
+// "c": "window.MsgNewMessage()",
+// "u": "if (((window.document.activeElement.id == 'messagepane') || (window.document.activeElement == 'threadTree' )) && (window.document.getElementById('tabmail').tabContainer.selectedIndex!=0)){ window.CloseTabOrWindow()}; window.goDoCommand('cmd_getMsgsForAuthAccounts'); window.goDoCommand('cmd_expandAllThreads')"
+// }`
+
 
 /**
  * TBKeys namespace.
@@ -18,12 +33,46 @@ var TBKeys = {
     // Basic information
     /********************************************/
     id: 'tbkeys@addons.thunderbird.net',
+    keys: {},
 
     /********************************************/
     // TBKeys setup functions
     /********************************************/
-    init: function() {
+    init: async function() {
+        await this.loadKeys()
         this.prepareWindows()
+    },
+
+    loadKeys: async function() {
+        let defaults = Services.prefs.getDefaultBranch('extensions.tbkeys.');
+        defaults.setCharPref("key_file", "")
+
+        let prefBranch = Services.prefs.getBranch('extensions.tbkeys.')
+        let key_file = prefBranch.getCharPref("key_file")
+
+        if (key_file == "") {
+            if (Services.appinfo.OS == "WINNT") {
+                key_file = OS.Path.join(OS.Constants.Path.homeDir, "_tbkeys.json")
+            } else {
+                key_file = OS.Path.join(OS.Constants.Path.homeDir, ".tbkeys.json")
+            }
+        }
+
+        let text
+        try {
+            text = await OS.File.read(key_file, {encoding: "utf-8"})
+        } catch (error) {
+            Services.console.logStringMessage("tbkeys: using default keybindings.")
+            let response = await fetch("chrome://tbkeys/content/tbkeys.json")
+            text = await response.text()
+        }
+
+        try {
+            this.keys = JSON.parse(text)
+        } catch (error) {
+            Services.console.logStringMessage(`tbkeys: Error parsing keys: ${error}: ${error.stack}`)
+            Services.console.logStringMessage(`${text}`)
+        }
     },
 
     cleanup: function() {
@@ -104,22 +153,8 @@ var TBKeys = {
             )
         }
         window.Mousetrap.reset()
-        this.bindKey(window, "j", "window.goDoCommand('cmd_nextMsg')")
-        this.bindKey(window, "k", "window.goDoCommand('cmd_previousMsg')")
-        this.bindKey(window, "o", "window.goDoCommand('cmd_openMessage')")
-        this.bindKey(window, "f", "window.goDoCommand('cmd_forward')")
-        this.bindKey(window, "#", "window.goDoCommand('cmd_delete')")
-        this.bindKey(window, "r", "window.goDoCommand('cmd_reply')")
-        this.bindKey(window, "a", "window.goDoCommand('cmd_replyall')")
-        this.bindKey(window, "x", "window.goDoCommand('cmd_archive')")
-        this.bindKey(window, "c", "window.MsgNewMessage()")
-        this.bindKey(window, "u", `
-            if (((window.document.activeElement.id == 'messagepane') || (window.document.activeElement == 'threadTree' )) && (window.document.getElementById('tabmail').tabContainer.selectedIndex!=0)){
-            window.CloseTabOrWindow()
+        for ( const [key, value] of Object.entries(this.keys)) {
+            this.bindKey(window, key, value)
         }
-
-        window.goDoCommand('cmd_getMsgsForAuthAccounts')
-        window.goDoCommand('cmd_expandAllThreads')
-        `)
     }
 }
