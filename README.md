@@ -4,6 +4,13 @@
 [Mousetrap](https://craig.is/killing/mice) to bind key sequences to custom
 commands.
 
+## Install
+
+*  Download the tbkeys.xpi file from one of the releases listed on the [GitHub releases page](https://github.com/willsALMANJ/tbkeys/releases).
+* Open the Add-ons Manager in Thunderbird (Tools->Add-ons).
+* Click on the gear icon in the upper right and choose "Install Add-on From File..." and then select the downloaded tbkeys.xpi file.
+* The add-on will self-update from the GitHub releases page when future updates are released.
+
 ## Default keybindings
 
 The default keybindings are modeled on GMail's keybindings.
