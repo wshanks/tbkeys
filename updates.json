@@ -1,0 +1,15 @@
+{
+  "addons": {
+    "tbkeys@addons.thunderbird.net": {
+      "updates": [
+        {
+          "version": "1.0",
+          "update_link": "https://github.com/willsALMANJ/tbkeys/releases/download/v1.0.0/tbkeys.xpi",
+          "browser_specific_settings": {
+              "gecko": { "strict_max_version": "68" }
+          }
+        }
+      ]
+    }
+  }
+}
