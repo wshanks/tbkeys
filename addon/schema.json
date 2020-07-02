@@ -1,0 +1,21 @@
+[
+  {
+    "namespace": "tbkeys",
+    "functions": [
+      {
+        "name": "bindkeys",
+        "type": "function",
+        "description": "Bind keys",
+        "async": true,
+        "parameters": [
+          {
+            "name": "keys",
+            "type": "object",
+            "description": "Keys to bind.",
+            "additionalProperties": {"type": "string"}
+          }
+        ]
+      }
+    ]
+  }
+]

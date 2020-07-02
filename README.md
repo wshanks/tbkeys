@@ -6,7 +6,7 @@ commands.
 
 ## Install
 
-*  Download the tbkeys.xpi file from one of the releases listed on the [GitHub releases page](https://github.com/willsALMANJ/tbkeys/releases).
+* Download the tbkeys.xpi file from one of the releases listed on the [GitHub releases page](https://github.com/willsALMANJ/tbkeys/releases).
 * Open the Add-ons Manager in Thunderbird (Tools->Add-ons).
 * Click on the gear icon in the upper right and choose "Install Add-on From File..." and then select the downloaded tbkeys.xpi file.
 * The add-on will self-update from the GitHub releases page when future updates are released.
@@ -30,15 +30,7 @@ The default keybindings are modeled on GMail's keybindings.
 
 ## Customizing keybindings
 
-To customize keybindings, create a file named `~/.tbkeys.json` (`_tbkeys.json`
-in the home directory on Windows) containing a JSON object mapping keybindings
-(with Mousetrap syntax) to javascript code to execute (see 
-[here](https://hg.mozilla.org/comm-central/file/tip/mail/base/content/mainCommandSet.inc.xhtml) 
-for cmd name references). A custom path to the keybindings file can be 
-specified by setting the `extensions.tbkeys.key_file` preference in 
-`about:config`.
-
-Note that if the `.tbkeys.json` file exists it overrides all of the default
-keybindings. The content of the default keybindings can be found in
-[addon/content/tbkeys.json](addon/content/tbkeys.json) and can be used as a
-starting point for creating a custom `.tbkeys.json` file.
+To customize keybindings, modify the "Key bindings" entry in the add-on's preferences pane which can be accessed from the add-on's entry in the Add-ons Manager ("Add-ons" in the Thunderbird menu).
+The "Key bindings" entry should be a JSON object mapping keybindings (with Mousetrap syntax) to javascript code to execute (see [here](https://hg.mozilla.org/comm-central/file/tip/mail/base/content/mainCommandSet.inc.xhtml) for cmd name references).
+The default keybindings can be restored by deleting all the text the "Key bindings" field and clicking "Submit".
+The preferences page will not allow invalid JSON to be submitted, but it does not sanity check the keybindings otherwise.
