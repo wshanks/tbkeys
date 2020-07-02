@@ -10,8 +10,29 @@
   "name": "tbkeys",
   "description": "Custom Thunderbird keybindings",
   "author": "WS",
-  "version": "1.0",
-  "legacy": {
-    "type": "bootstrap"
+  "version": "2.0",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "options_ui": {
+    "browser_style": true,
+    "page": "options.html"
+  },
+  "permissions": ["storage"],
+  "experiment_apis": {
+    "tbkeys": {
+      "schema": "schema.json",
+      "parent": {
+        "scopes": [
+          "addon_parent"
+        ],
+        "paths": [
+          [
+            "tbkeys"
+          ]
+        ],
+        "script": "implementation.js"
+      }
+    }
   }
 }

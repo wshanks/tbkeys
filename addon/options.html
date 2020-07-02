@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <style>
+        textarea:invalid {
+          box-shadow: 0 0 5px 1px red;
+        }
+    </style>
+  </head>
+
+  <body>
+    <table>
+      <tr>
+        <td>
+          <strong>Settings</strong>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label>Key bindings</label> 
+        </td>
+        <td>
+          <textarea id="keys" rows="20" cols="60"></textarea>
+        </td>
+      </tr>
+
+    </table>
+    <table>
+      <tr>
+        <td>
+          <form id="save">
+            <button type="submit">Save settings</button>
+          </form>
+        </td>
+      </tr>
+    </table>
+
+    <script src="options.js"></script>
+
+  </body>
+</html>
