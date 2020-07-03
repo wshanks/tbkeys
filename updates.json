@@ -10,8 +10,12 @@
           }
         },
         {
-          "version": "2.0",
+          "version": "2.0.0",
           "update_link": "https://github.com/willsALMANJ/tbkeys/releases/download/v2.0.0/tbkeys.xpi"
+        },
+        {
+          "version": "2.0.1",
+          "update_link": "https://github.com/willsALMANJ/tbkeys/releases/download/v2.0.1/tbkeys.xpi"
         }
       ]
     }
