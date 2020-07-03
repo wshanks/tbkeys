@@ -32,9 +32,11 @@ The default keybindings are modeled on GMail's keybindings.
 
 To customize keybindings, create a file named `~/.tbkeys.json` (`_tbkeys.json`
 in the home directory on Windows) containing a JSON object mapping keybindings
-(with Mousetrap syntax) to javascript code to execute. A custom path to the
-keybindings file can be specified by setting the `extensions.tbkeys.key_file`
-preference in `about:config`.
+(with Mousetrap syntax) to javascript code to execute (see 
+[here](https://hg.mozilla.org/comm-central/file/tip/mail/base/content/mainCommandSet.inc.xhtml) 
+for cmd name references). A custom path to the keybindings file can be 
+specified by setting the `extensions.tbkeys.key_file` preference in 
+`about:config`.
 
 Note that if the `.tbkeys.json` file exists it overrides all of the default
 keybindings. The content of the default keybindings can be found in
