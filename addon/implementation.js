@@ -81,6 +81,7 @@ var TBKeys = {
             return (
                 tagName == 'textbox' || tagName == 'input' ||
                 tagName == 'select' || tagName == 'textarea' ||
+                tagName == 'html:input' || tagName == 'search-textbox' ||
                 (element.contentEditable && element.contentEditable == 'true')
             )
         }
