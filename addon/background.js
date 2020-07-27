@@ -2,16 +2,16 @@
 /* global browser */
 var defaults = {
     "keys": `{
-    "j": "window.goDoCommand('cmd_nextMsg')",
-    "k": "window.goDoCommand('cmd_previousMsg')",
-    "o": "window.goDoCommand('cmd_openMessage')",
-    "f": "window.goDoCommand('cmd_forward')",
-    "#": "window.goDoCommand('cmd_delete')",
-    "r": "window.goDoCommand('cmd_reply')",
-    "a": "window.goDoCommand('cmd_replyall')",
-    "x": "window.goDoCommand('cmd_archive')",
-    "c": "window.MsgNewMessage()",
-    "u": "if (((window.document.activeElement.id == 'messagepane') || (window.document.activeElement == 'threadTree' )) && (window.document.getElementById('tabmail').tabContainer.selectedIndex!=0)){ window.CloseTabOrWindow()}; window.goDoCommand('cmd_getMsgsForAuthAccounts'); window.goDoCommand('cmd_expandAllThreads')"
+    "j": "cmd:cmd_nextMsg",
+    "k": "cmd:cmd_previousMsg",
+    "o": "cmd:cmd_openMessage",
+    "f": "cmd:cmd_forward",
+    "#": "cmd:cmd_delete",
+    "r": "cmd:cmd_reply",
+    "a": "cmd:cmd_replyall",
+    "x": "cmd:cmd_archive",
+    "c": "func:MsgNewMessage",
+    "u": "tbkeys:closeMessageAndRefresh"
 }`
 }
 var optionNames = Object.getOwnPropertyNames(defaults)
