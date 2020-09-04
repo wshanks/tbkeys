@@ -31,5 +31,16 @@ The default keybindings are modeled on GMail's keybindings.
 ## Customizing keybindings
 
 To customize keybindings, modify the "Key bindings" entry in the add-on's preferences pane which can be accessed from the add-on's entry in the Add-ons Manager ("Add-ons" in the Thunderbird menu).
-The "Key bindings" entry should be a JSON object mapping keybindings (with Mousetrap syntax) to javascript code to execute (see [here](https://hg.mozilla.org/comm-central/file/tip/mail/base/content/mainCommandSet.inc.xhtml) for cmd name references).
+The "Key bindings" entry should be a JSON object mapping keybindings (with Mousetrap syntax as described [here](https://craig.is/killing/mice) to javascript code to execute (see [here](https://hg.mozilla.org/comm-central/file/tip/mail/base/content/mainCommandSet.inc.xhtml) for cmd name references).
+This [old wiki page about Keyconfig](http://kb.mozillazine.org/Keyconfig_extension:_Thunderbird) also has some commands that are still valid.
 The preferences page will not allow invalid JSON to be submitted, but it does not sanity check the keybindings otherwise.
+
+## Common keybindings
+
+Here are some commonly desired keybindings:
+
+* **Next tab**: `window.document.getElementById("tabmail-tabs").advanceSelectedTabs(1, true)`
+* **Previous tab**: `window.document.getElementById("tabmail-tabs").advanceSelectedTabs(-1, true)`
+* **Close tab**: `window.document.getElementById('tabmail-tabs').selectedItem.getElementsByClassName('tab-close-button')[0].click()`
+* **Create new folder**: `goDoCommand('cmd_newFolder')`
+* **Subscribe to feed**: `window.openSubscriptionsDialog(window.GetSelectedMsgFolders()[0])`
