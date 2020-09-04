@@ -59,7 +59,7 @@ Here are some examples of eval commands for commonly desired keybindings:
 
 * **Next tab**: `window.document.getElementById('tabmail-tabs').advanceSelectedTabs(1, true)`
 * **Previous tab**: `window.document.getElementById('tabmail-tabs').advanceSelectedTabs(-1, true)`
-* **Close tab**: `window.document.getElementById('tabmail-tabs').selectedItem.getElementsByClassName('tab-close-button')[0].click()`
+* **Close tab**: `func:CloseTabOrWindow`
 * **Scroll message list down**: `window.document.getElementById('threadTree').scrollByLines(1)`
 * **Scroll message list up**: `window.document.getElementById('threadTree').scrollByLines(-1)`
 * **Scroll message body down**: `window.document.getElementById('messagepane').contentDocument.documentElement.getElementsByTagName('body')[0].scrollBy(0, 100)`
