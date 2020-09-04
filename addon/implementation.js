@@ -14,6 +14,16 @@ var extension = ExtensionParent.GlobalManager.getExtension(
     "tbkeys@addons.thunderbird.net"
 )
 
+var builtins = {
+    closeMessageAndRefresh: function(window) {
+        if (window.document.getElementById('tabmail').tabContainer.selectedIndex != 0) {
+            window.CloseTabOrWindow()
+        }
+        window.goDoCommand('cmd_getMsgsForAuthAccounts')
+        window.goDoCommand('cmd_expandAllThreads')
+    }
+}
+
 var TBKeys = {
     keys: {},
 
@@ -93,7 +103,25 @@ var TBKeys = {
         window.Mousetrap.reset()
         for (let key of Object.keys(this.keys)) {
             window.Mousetrap.bind(key, function() {
-                eval(TBKeys.keys[key])  // eslint-disable-line no-eval
+                let command = TBKeys.keys[key]
+                let cmdType = command.split(":", 1)[0]
+                let cmdBody = command.slice(cmdType.length + 1)
+                switch (cmdType) {
+                    case "cmd":
+                        window.goDoCommand(cmdBody)
+                        break
+                    case "func":
+                        window[cmdBody]()
+                        break
+                    case "tbkeys":
+                        builtins[cmdBody](window)
+                        break
+                    case "unset":
+                        break
+                    default:
+                        eval(command)  // eslint-disable-line no-eval
+                        break
+                }
                 return false
             })
         }
