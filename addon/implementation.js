@@ -79,6 +79,7 @@ var TBKeys = {
         window.Mousetrap.prototype.stopCallback = function(e, element, _combo) {
             let tagName = element.tagName.toLowerCase()
             return (
+                tagName == 'imconversation' ||
                 tagName == 'textbox' || tagName == 'input' ||
                 tagName == 'select' || tagName == 'textarea' ||
                 tagName == 'html:input' || tagName == 'search-textbox' ||
