@@ -44,5 +44,6 @@ Here are some commonly desired keybindings:
 * **Previous tab**: `window.document.getElementById("tabmail-tabs").advanceSelectedTabs(-1, true)`
 * **Close tab**: `window.document.getElementById('tabmail-tabs').selectedItem.getElementsByClassName('tab-close-button')[0].click()`
 * **Scroll message list**: `window.document.getElementById('threadTree').scrollByLines(1)`
+* **Scroll message body**: `window.document.getElementById("messagepane").contentDocument.documentElement.getElementsByTagName("body")[0].scrollBy(0, 100)`
 * **Create new folder**: `goDoCommand('cmd_newFolder')`
 * **Subscribe to feed**: `window.openSubscriptionsDialog(window.GetSelectedMsgFolders()[0])`
