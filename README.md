@@ -32,5 +32,4 @@ The default keybindings are modeled on GMail's keybindings.
 
 To customize keybindings, modify the "Key bindings" entry in the add-on's preferences pane which can be accessed from the add-on's entry in the Add-ons Manager ("Add-ons" in the Thunderbird menu).
 The "Key bindings" entry should be a JSON object mapping keybindings (with Mousetrap syntax) to javascript code to execute (see [here](https://hg.mozilla.org/comm-central/file/tip/mail/base/content/mainCommandSet.inc.xhtml) for cmd name references).
-The default keybindings can be restored by deleting all the text the "Key bindings" field and clicking "Submit".
 The preferences page will not allow invalid JSON to be submitted, but it does not sanity check the keybindings otherwise.
