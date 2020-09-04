@@ -24,13 +24,23 @@ var builtins = {
     }
 }
 
+var windowTypes = {
+    "main": "mail:3pane",
+    "compose": "msgcompose"
+}
+var tbWindowTypes = Object.values(windowTypes)
+
 var TBKeys = {
     keys: {},
 
     cleanup: function() {
-        let windows = Services.wm.getEnumerator('mail:3pane');
+        let windows = Services.wm.getEnumerator(null)
         while (windows.hasMoreElements()) {
             let window = windows.getNext()
+            let type = window.document.documentElement.getAttribute('windowtype')
+            if (!tbWindowTypes.includes(type)) {
+                continue
+            }
 
             if (typeof window.Mousetrap != 'undefined') {
                 window.Mousetrap.reset()
@@ -43,9 +53,14 @@ var TBKeys = {
 
     prepareWindows: function() {
         // Load scripts for previously opened windows
-        var windows = Services.wm.getEnumerator('mail:3pane');
+        var windows = Services.wm.getEnumerator(null)
         while (windows.hasMoreElements()) {
-            this.loadWindowChrome(windows.getNext())
+            let window = windows.getNext()
+            let type = window.document.documentElement.getAttribute('windowtype')
+            if (!tbWindowTypes.includes(type)) {
+                continue
+            }
+            this.loadWindowChrome(window)
         }
 
         // Add listener to load scripts in windows opened in the future
@@ -59,10 +74,7 @@ var TBKeys = {
                 .getInterface(Components.interfaces.nsIDOMWindow)
 
             domWindow.addEventListener('load', function listener() {
-                if (domWindow.document.documentElement.
-                        getAttribute('windowtype') == 'mail:3pane') {
-                    TBKeys.loadWindowChrome(domWindow)
-                }
+                TBKeys.loadWindowChrome(domWindow)
             }, {once: true})
         },
 
@@ -82,28 +94,51 @@ var TBKeys = {
     },
 
     loadWindowChromeWhenReady: function(window) {
+        let type = window.document.documentElement.getAttribute('windowtype')
+        if (!tbWindowTypes.includes(type)) {
+            return
+        }
         Services.scriptloader.loadSubScript(
             extension.rootURI.resolve("modules/mousetrap.js"),
             window
         )
-        window.Mousetrap.prototype.stopCallback = function(e, element, _combo) {
+        window.Mousetrap.prototype.stopCallback = function(e, element, combo, seq) {
             let tagName = element.tagName.toLowerCase()
-            return (
+            let isText = (
                 tagName == 'imconversation' ||
                 tagName == 'textbox' || tagName == 'input' ||
                 tagName == 'select' || tagName == 'textarea' ||
                 tagName == 'html:input' || tagName == 'search-textbox' ||
                 (element.contentEditable && element.contentEditable == 'true')
             )
+
+            let firstCombo = combo
+            if (seq !== undefined) {
+                firstCombo = seq.trim().split(" ")[0]
+            }
+            let modifiers = ["ctrl", "alt", "meta", "option", "command"]
+            let hasModifier = false
+            for (let mod of modifiers) {
+                if (firstCombo.includes(mod)) {
+                    hasModifier = true
+                    break
+                }
+            }
+
+            return isText && !hasModifier
         }
         this.bindKeys(window)
     },
 
     bindKeys: function(window) {
         window.Mousetrap.reset()
-        for (let key of Object.keys(this.keys)) {
+        let type = window.document.documentElement.getAttribute('windowtype')
+        if (!this.keys.hasOwnProperty(type)) {
+            return
+        }
+        for (let key of Object.keys(this.keys[type])) {
             window.Mousetrap.bind(key, function() {
-                let command = TBKeys.keys[key]
+                let command = TBKeys.keys[type][key]
                 let cmdType = command.split(":", 1)[0]
                 let cmdBody = command.slice(cmdType.length + 1)
                 switch (cmdType) {
@@ -127,9 +162,12 @@ var TBKeys = {
         }
     },
 
-    updateKeys: function(keys) {
-        this.keys = keys
-        var windows = Services.wm.getEnumerator('mail:3pane');
+    updateKeys: function(keys, windowType) {
+        if (!windowTypes.hasOwnProperty(windowType)) {
+            return
+        }
+        this.keys[windowTypes[windowType]] = keys
+        var windows = Services.wm.getEnumerator(windowTypes[windowType]);
         while (windows.hasMoreElements()) {
             let window = windows.getNext()
 
@@ -148,8 +186,8 @@ var tbkeys = class extends ExtensionCommon.ExtensionAPI {  // eslint-disable-lin
 
         return {
             tbkeys: {
-                bindkeys: async function(keys) {  // eslint-disable-line require-await
-                    TBKeys.updateKeys(keys)
+                bindkeys: async function(keys, windowType) {  // eslint-disable-line require-await
+                    TBKeys.updateKeys(keys, windowType)
                 }
             }
         }

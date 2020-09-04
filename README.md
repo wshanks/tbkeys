@@ -9,9 +9,9 @@
 * Click on the gear icon in the upper right and choose "Install Add-on From File..." and then select the downloaded tbkeys.xpi file.
 * The add-on will self-update from the GitHub releases page when future updates are released.
 
-## Default keybindings
+## Default key bindings
 
-The default keybindings are modeled on GMail's keybindings.
+The default key bindings for the main window are modeled on GMail's key bindings.
 
 | Key | Function |
 | --- | -------- |
@@ -26,17 +26,23 @@ The default keybindings are modeled on GMail's keybindings.
 |  o  | Open message |
 |  x  | Archive message |
 
-## Customizing keybindings
+## Customizing key bindings
 
-To customize keybindings, modify the "Key bindings" entry in the add-on's preferences pane which can be accessed from the add-on's entry in the Add-ons Manager ("Add-ons" in the Thunderbird menu).
-The "Key bindings" entry should be a JSON object mapping keybindings (with Mousetrap syntax as described [here](https://craig.is/killing/mice) to javascript code to execute (see [here](https://hg.mozilla.org/comm-central/file/tip/mail/base/content/mainCommandSet.inc.xhtml) for cmd name references).
-This [old wiki page about Keyconfig](http://kb.mozillazine.org/Keyconfig_extension:_Thunderbird) also has some commands that are still valid.
-The Developer Toolbox (Tools->Developer Tools->Developer Toolbox in the menu) can be useful for poking around at the UI to find the name of an element to call a function on.
-The preferences page will not allow invalid JSON to be submitted, but it does not sanity check the keybindings otherwise.
+To customize key bindings, modify the "key bindings" entries in the add-on's preferences pane which can be accessed from the add-on's entry in the Add-ons Manager ("Add-ons" in the Thunderbird menu).
+Here are some things to consider when setting key bindings:
+
+* The "key bindings" entry should be a JSON object mapping key bindings (with Mousetrap syntax as described [here](https://craig.is/killing/mice) to a valid command (see the [Command syntax](#command-syntax)) section.
+* There are separate fields in the preferences page for setting key bindings for the main Thunderbird window and the compose window.
+Key bindings do not fire in other windows.
+* Key bindings do not fire in text input fields unless the first key combo includes a modifier other than `shift`.
+* The preferences page will not allow invalid JSON to be submitted, but it does not sanity check the key bindings otherwise.
+* This [old wiki page about Keyconfig](http://kb.mozillazine.org/Keyconfig_extension:_Thunderbird) also has some commands that are still valid.
+* The Developer Toolbox (Tools->Developer Tools->Developer Toolbox in the menu) can be useful for poking around at the UI to find the name of an element to call a function on.
+* Defining a key sequence where the first key combination in the sequence is the same as a built-in shortcut (like `ctrl+j`) is not supported.
 
 ### Command syntax
 
-A few different styles of commands can be specified for keybindings.
+A few different styles of commands can be specified for key bindings.
 They are:
 
 * **Simple commands**: These follow the format `cmd:<command_name>` where `<command_name>` is a command that Thunderbird can execute with `goDoCommand()`.
@@ -51,14 +57,14 @@ When an `unset` keybinding is triggered, nothing happens.
 This can be useful unbinding built-in Thunderbird key bindings which you do not wish to trigger by accident.
 * **Eval commands**: These entries may contain arbitrary javascript code on which tbkeys will call `eval()` when the key binding is triggered.
 Any entry not matching the prefixes of the other command types is treated as an eval command.
-**NOTE:** eval commands are not available in tbkeys-lite.
+**NOTE:** eval commands are not available in tbkeys-lite and will function the same as unset commands instead.
 
-## Common keybindings
+## Common key bindings
 
-Here are some examples of eval commands for commonly desired keybindings:
+Here are some examples of eval commands for commonly desired key bindings:
 
-* **Next tab**: `window.document.getElementById('tabmail-tabs').advanceSelectedTabs(1, true)`
-* **Previous tab**: `window.document.getElementById('tabmail-tabs').advanceSelectedTabs(-1, true)`
+* **Next tab**: `window.document.getElementById('tabmail-tabs').advanceSelectedTab(1, true)`
+* **Previous tab**: `window.document.getElementById('tabmail-tabs').advanceSelectedTab(-1, true)`
 * **Close tab**: `func:CloseTabOrWindow`
 * **Scroll message list down**: `window.document.getElementById('threadTree').scrollByLines(1)`
 * **Scroll message list up**: `window.document.getElementById('threadTree').scrollByLines(-1)`
@@ -67,9 +73,9 @@ Here are some examples of eval commands for commonly desired keybindings:
 * **Create new folder**: `goDoCommand('cmd_newFolder')`
 * **Subscribe to feed**: `window.openSubscriptionsDialog(window.GetSelectedMsgFolders()[0])`
 
-## Unsetting default keybindings
+## Unsetting default key bindings
 
-The "Unset singles" button in the preferences pane can be used to unset Thunderbird's default single key bindings.
+The "Unset singles" button in the preferences pane can be used to unset Thunderbird's default single key bindings in the main window.
 This function set all of Thunderbird's default single key shortcuts to `unset` unless they are currently set in tbkey's preferences (that is, it won't overwrite tbkeys' existing settings for single key shortcuts).
 
 ## tbkeys and tbkeys-lite
