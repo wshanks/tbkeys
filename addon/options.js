@@ -4,7 +4,7 @@ var background = browser.extension.getBackgroundPage()
 
 async function saveOptions(e) {
     e.preventDefault()
-    let originalSettings = await background.getSettings()
+    let originalSettings = await browser.storage.local.get(background.optionNames)
     let settings = {}
 
     if (!validateKeys()) {
@@ -26,7 +26,10 @@ async function saveOptions(e) {
         }
     }
     await browser.storage.local.set(settings)
-    if (settings.hasOwnProperty("keys") && settings.keys != originalSettings.keys) {
+    if (!settings.hasOwnProperty("keys") && originalSettings.hasOwnProperty("keys")) {
+        await browser.storage.local.remove("keys")
+    }
+    if (settings.keys != originalSettings.keys) {
         await background.applyKeys()
     }
     await restoreOptions()
@@ -47,6 +50,13 @@ async function restoreOptions() {
 }
 
 
+async function restoreDefaults(e) {
+    e.preventDefault()
+    await browser.storage.local.remove(background.optionNames)
+    await restoreOptions()
+}
+
+
 function validateKeys() {
     let keysField = document.querySelector('#keys')
     try {
@@ -64,3 +74,4 @@ function validateKeys() {
 
 document.addEventListener('DOMContentLoaded', restoreOptions)
 document.querySelector('#save').addEventListener('submit', saveOptions)
+document.querySelector('#restore').addEventListener('submit', restoreDefaults)
