@@ -4,7 +4,6 @@ var background = browser.extension.getBackgroundPage()
 
 async function saveOptions(e) {
     e.preventDefault()
-    let originalSettings = await browser.storage.local.get(background.optionNames)
     let settings = {}
 
     if (!validateKeys()) {
@@ -26,12 +25,12 @@ async function saveOptions(e) {
         }
     }
     await browser.storage.local.set(settings)
-    if (!settings.hasOwnProperty("keys") && originalSettings.hasOwnProperty("keys")) {
-        await browser.storage.local.remove("keys")
+    for (let setting of background.optionNames) {
+        if (!settings.hasOwnProperty(setting)) {
+            await browser.storage.local.remove(setting)
+        }
     }
-    if (settings.keys != originalSettings.keys) {
-        await background.applyKeys()
-    }
+    await background.applyKeys()
     await restoreOptions()
 }
 
@@ -59,11 +58,11 @@ async function restoreDefaults(e) {
 
 async function unsetSingleKeys(e) {
     e.preventDefault()
-    let settings = await browser.storage.local.get("keys")
-    if (!settings.hasOwnProperty("keys")) {
-        settings.keys = background.defaults.keys
+    let settings = await browser.storage.local.get("mainkeys")
+    if (!settings.hasOwnProperty("mainkeys")) {
+        settings.mainkeys = background.defaults.mainkeys
     }
-    let keys = JSON.parse(settings.keys)
+    let keys = JSON.parse(settings.mainkeys)
     let singles = [
         "0",
         "1",
@@ -99,24 +98,27 @@ async function unsetSingleKeys(e) {
             keys[key] = "unset"
         }
     }
-    await browser.storage.local.set({"keys": JSON.stringify(keys, null, 4)})
+    await browser.storage.local.set({"mainkeys": JSON.stringify(keys, null, 4)})
     await background.applyKeys()
     await restoreOptions()
 }
 
 
 function validateKeys() {
-    let keysField = document.querySelector('#keys')
-    try {
-        if (keysField.value != "") {
-            JSON.parse(keysField.value)
+    let keysFields = document.querySelectorAll(".json")
+    let valid = true
+    for (let keysField of keysFields) {
+        try {
+            if (keysField.value != "") {
+                JSON.parse(keysField.value)
+            }
+            keysField.setCustomValidity("")
+        } catch (err) {
+            keysField.setCustomValidity("Invalid JSON")
+            valid = false
         }
-        keysField.setCustomValidity("")
-        return true
-    } catch (err) {
-        keysField.setCustomValidity("Invalid JSON")
-        return false
     }
+    return valid
 }
 
 
