@@ -67,6 +67,11 @@ Here are some examples of eval commands for commonly desired keybindings:
 * **Create new folder**: `goDoCommand('cmd_newFolder')`
 * **Subscribe to feed**: `window.openSubscriptionsDialog(window.GetSelectedMsgFolders()[0])`
 
+## Unsetting default keybindings
+
+The "Unset singles" button in the preferences pane can be used to unset Thunderbird's default single key bindings.
+This function set all of Thunderbird's default single key shortcuts to `unset` unless they are currently set in tbkey's preferences (that is, it won't overwrite tbkeys' existing settings for single key shortcuts).
+
 ## tbkeys and tbkeys-lite
 
 tbkeys-lite is a version of tbkeys with the ability to execute arbitrary javascript removed.
