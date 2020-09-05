@@ -28,7 +28,7 @@ $(BLDDIR)/tbkeys-lite.xpi: $(SRC_FILES)
 	sed -i 's#^\( *\)eval(.*#\1// Do nothing#' $(dir $@)/lite/implementation.js
 	# Change name
 	sed -i 's/tbkeys@/tbkeys-lite@/' $(dir $@)/lite/manifest.json
-	sed -i 's/"name": "tbkeys"/"name": tbkeys-lite"/' $(dir $@)/lite/manifest.json
+	sed -i 's/"name": "tbkeys"/"name": "tbkeys-lite"/' $(dir $@)/lite/manifest.json
 	sed -i 's/tbkeys@/tbkeys-lite@/' $(dir $@)/lite/implementation.js
 	# Build xpi
 	cd $(dir $@)/lite; zip -FSr $(ABS_BLDDIR)/tbkeys-lite.xpi $(ADDON_FILES)
