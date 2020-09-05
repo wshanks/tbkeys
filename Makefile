@@ -25,7 +25,7 @@ $(BLDDIR)/tbkeys-lite.xpi: $(SRC_FILES)
 	sed -i '/update_url/d' $(dir $@)/lite/manifest.json
 	sed -i 's/\( *"strict_min_version".*\),$$/\1/' $(dir $@)/lite/manifest.json
 	# Drop eval()
-	sed -i 's/^\( *\)eval(.*/\1# Do nothing/' $(dir $@)/lite/implementation.js
+	sed -i 's#^\( *\)eval(.*#\1// Do nothing#' $(dir $@)/lite/implementation.js
 	# Change name
 	sed -i 's/tbkeys@/tbkeys-lite@/' $(dir $@)/lite/manifest.json
 	sed -i 's/"name": "tbkeys"/"name": tbkeys-lite"/' $(dir $@)/lite/manifest.json
