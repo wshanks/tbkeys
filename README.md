@@ -31,14 +31,15 @@ The default key bindings for the main window are modeled on GMail's key bindings
 To customize key bindings, modify the "key bindings" entries in the add-on's preferences pane which can be accessed from the add-on's entry in the Add-ons Manager ("Add-ons" in the Thunderbird menu).
 Here are some things to consider when setting key bindings:
 
-* The "key bindings" entry should be a JSON object mapping key bindings (with Mousetrap syntax as described [here](https://craig.is/killing/mice) to a valid command (see the [Command syntax](#command-syntax)) section.
+* The "key bindings" entry should be a JSON object mapping key bindings (with Mousetrap syntax as described [here](https://craig.is/killing/mice)) to a valid command (see the [Command syntax](#command-syntax)) section.
 * There are separate fields in the preferences page for setting key bindings for the main Thunderbird window and the compose window.
 Key bindings do not fire in other windows.
 * Key bindings do not fire in text input fields unless the first key combo includes a modifier other than `shift`.
 * The preferences page will not allow invalid JSON to be submitted, but it does not sanity check the key bindings otherwise.
 * This [old wiki page about Keyconfig](http://kb.mozillazine.org/Keyconfig_extension:_Thunderbird) also has some commands that are still valid.
 * The Developer Toolbox (Tools->Developer Tools->Developer Toolbox in the menu) can be useful for poking around at the UI to find the name of an element to call a function on.
-* Defining a key sequence where the first key combination in the sequence is the same as a built-in shortcut (like `ctrl+j`) is not supported.
+* Defining a key sequence (meaning multiple keys in succession) where the first key combination in the sequence is the same as a built-in shortcut (like `ctrl+j ctrl+k`) is not supported.
+Single keys with modifiers may be mapped to override the built-in shortcuts but not sequences.
 
 ### Command syntax
 
