@@ -20,6 +20,10 @@
         {
           "version": "2.0.2",
           "update_link": "https://github.com/willsALMANJ/tbkeys/releases/download/v2.0.2/tbkeys.xpi"
+        },
+        {
+          "version": "2.1.0",
+          "update_link": "https://github.com/willsALMANJ/tbkeys/releases/download/v2.1.0/tbkeys.xpi"
         }
       ]
     }
