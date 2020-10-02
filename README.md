@@ -73,7 +73,7 @@ Here are some examples of eval commands for commonly desired key bindings:
 * **Scroll message list up**: `window.document.getElementById('threadTree').scrollByLines(-1)`
 * **Scroll message body down**: `window.document.getElementById('messagepane').contentDocument.documentElement.getElementsByTagName('body')[0].scrollBy(0, 100)`
 * **Scroll message body up**: `window.document.getElementById('messagepane').contentDocument.documentElement.getElementsByTagName('body')[0].scrollBy(0, -100)`
-* **Create new folder**: `goDoCommand('cmd_newFolder')`
+* **Create new folder**: `window.goDoCommand('cmd_newFolder')`
 * **Subscribe to feed**: `window.openSubscriptionsDialog(window.GetSelectedMsgFolders()[0])`
 
 ## Unsetting default key bindings
