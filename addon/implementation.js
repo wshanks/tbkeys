@@ -109,6 +109,7 @@ var TBKeys = {
                 tagName == 'textbox' || tagName == 'input' ||
                 tagName == 'select' || tagName == 'textarea' ||
                 tagName == 'html:input' || tagName == 'search-textbox' ||
+                tagName == 'hmtl:textarea' ||
                 (element.contentEditable && element.contentEditable == 'true')
             )
 
