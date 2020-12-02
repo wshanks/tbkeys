@@ -1,3 +1,6 @@
+* 2.1.1:
+  + Fix keys being captured in some textboxes like the signature box in settings.
+
 * 2.1.0:
   + Support for key bindings in the compose window
   + New lite packaging of the xpi without `eval()` support

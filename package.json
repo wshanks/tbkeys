@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/willsALMANJ/tbkeys.git"
+    "url": "git+https://github.com/wshanks/tbkeys.git"
   },
   "keywords": [],
   "author": "Will Shanks",
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/willsALMANJ/tbkeys/issues"
+    "url": "https://github.com/wshanks/tbkeys/issues"
   },
-  "homepage": "https://github.com/willsALMANJ/tbkeys#readme",
+  "homepage": "https://github.com/wshanks/tbkeys#readme",
   "devDependencies": {
     "eslint": "^6.1.0"
   }

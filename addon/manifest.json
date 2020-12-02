@@ -4,13 +4,13 @@
     "gecko": {
       "id": "tbkeys@addons.thunderbird.net",
       "strict_min_version": "68.0",
-      "update_url": "https://raw.githubusercontent.com/willsALMANJ/tbkeys/main/updates.json"
+      "update_url": "https://raw.githubusercontent.com/wshanks/tbkeys/main/updates.json"
     }
   },
   "name": "tbkeys",
   "description": "Custom Thunderbird keybindings",
   "author": "Will Shanks",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "background": {
     "scripts": ["background.js"]
   },
