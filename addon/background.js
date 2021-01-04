@@ -17,8 +17,41 @@ var defaults = {
 }
 var optionNames = Object.getOwnPropertyNames(defaults)
 
+// Taken from https://thunderbird.topicbox.com/groups/addons/T46e96308f41c0de1
+const promiseWithTimeout = function(ms, promise){
+  // Create a promise that rejects in <ms> milliseconds
+  let timeout = new Promise((resolve, reject) => {
+    let id = setTimeout(() => {
+      clearTimeout(id);
+      reject(new Error("Timed out in " + ms + "ms."))
+    }, ms)
+  })
+
+  // Returns a race between our timeout and the passed in promise
+  return Promise.race([
+    promise,
+    timeout
+  ])
+}
+
+
 async function getSettings() {
-    let settings = await browser.storage.local.get(optionNames)
+    let settings
+    const retries = 7;
+    const baseTimeout = 700;
+    // Storage retrieval does not always work, so retry in a loop.
+    // See https://thunderbird.topicbox.com/groups/addons/T46e96308f41c0de1
+    for (let tryNum = 0;; tryNum++) {
+        try {
+            settings = await promiseWithTimeout(baseTimeout * (tryNum + 1), browser.storage.local.get())
+            break
+        } catch (error) {
+            if (tryNum >= retries) {
+                error.message = "TBKeys: could not load settings -- " + error.message;
+                throw error
+            }
+        }
+    }
 
     // Migrate old "keys" setting to "mainkeys"
     if (settings.hasOwnProperty("keys")) {
