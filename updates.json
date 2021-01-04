@@ -6,7 +6,7 @@
           "version": "1.0",
           "update_link": "https://github.com/wshanks/tbkeys/releases/download/v1.0.0/tbkeys.xpi",
           "browser_specific_settings": {
-              "gecko": { "strict_max_version": "68" }
+            "gecko": { "strict_max_version": "68" }
           }
         },
         {
@@ -29,7 +29,6 @@
           "version": "2.1.1",
           "update_link": "https://github.com/wshanks/tbkeys/releases/download/v2.1.1/tbkeys.xpi"
         }
-
       ]
     }
   }

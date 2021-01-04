@@ -12,12 +12,12 @@
             "name": "keys",
             "type": "object",
             "description": "Keys to bind.",
-            "additionalProperties": {"type": "string"}
+            "additionalProperties": { "type": "string" }
           },
           {
-              "names": "windowType",
-              "type": "string",
-              "description": "Window type to bind keys in"
+            "names": "windowType",
+            "type": "string",
+            "description": "Window type to bind keys in"
           }
         ]
       }
