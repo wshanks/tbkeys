@@ -15,6 +15,7 @@ var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const EXTENSION_NAME = "tbkeys@addons.thunderbird.net";
 var extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME);
 
+// Extra functions available for binding with tbkeys
 var builtins = {
   closeMessageAndRefresh: function (win) {
     if (
@@ -27,16 +28,96 @@ var builtins = {
   },
 };
 
+// Table to translate internal Thunderbird window names to shorter forms
+// exposed in tbkeys' preferences.
 var windowTypes = {
   main: "mail:3pane",
   compose: "msgcompose",
 };
-var tbWindowTypes = Object.values(windowTypes);
+
+// Function called by Mousetrap to test if it should stop processing a key event
+//
+// This function is based on the default callback in Mousetrap but is extended
+// to include more text input fields that are specific to Thunderbird.
+// Additionally, it does not ignore text fields if the first key includes
+// modifiers other than shift.
+function stopCallback(e, element, combo, seq) {
+  let tagName = element.tagName.toLowerCase();
+  let isText =
+    tagName == "imconversation" ||
+    tagName == "textbox" ||
+    tagName == "input" ||
+    tagName == "select" ||
+    tagName == "textarea" ||
+    tagName == "html:input" ||
+    tagName == "search-textbox" ||
+    tagName == "html:textarea" ||
+    (element.contentEditable && element.contentEditable == "true");
+
+  let firstCombo = combo;
+  if (seq !== undefined) {
+    firstCombo = seq.trim().split(" ")[0];
+  }
+  let modifiers = ["ctrl", "alt", "meta", "option", "command"];
+  let hasModifier = false;
+  for (let mod of modifiers) {
+    if (firstCombo.includes(mod)) {
+      hasModifier = true;
+      break;
+    }
+  }
+
+  return isText && !hasModifier;
+}
+
+
+// Build a callback function to execute a tbkeys command
+//
+// win is the window in which the command should be executed
+//
+// command should be a string formatted as type:body where type is cmd, func,
+// tbkeys, unset, or eval and body is the type-specific content of the command
+function buildKeyCommand(win, command) {
+  let callback = function () {
+      // window is defined here so that it is available for use with eval() in
+      // the non-lite version of tbkeys
+      // eslint-disable-next-line no-unused-vars
+      let window = win;
+
+      let cmdType = command.split(":", 1)[0];
+      let cmdBody = command.slice(cmdType.length + 1);
+      switch (cmdType) {
+        case "cmd":
+          win.goDoCommand(cmdBody);
+          break;
+        case "func":
+          win[cmdBody]();
+          break;
+        case "tbkeys":
+          builtins[cmdBody](win);
+          break;
+        case "unset":
+          break;
+        default:
+          eval(command); // eslint-disable-line no-eval
+          break;
+      }
+      return false;
+    }
+
+  return callback
+}
+
 
 var TBKeys = {
+  // Store keybindings so they can be applied to new windows that are opened
+  // after the bindings have been set
   keys: {},
-  initialized: false,
 
+  // The init() function uses the `initialized` flag so that its initialization
+  // code can be run only once but it can be called at the latest possible
+  // moment (at the first usage of the experiment API).
+  initialized: false,
   init: function () {
     if (this.initialized) {
       return;
@@ -59,39 +140,7 @@ var TBKeys = {
       extension.rootURI.resolve("modules/mousetrap.js"),
       win
     );
-    win.Mousetrap.prototype.stopCallback = function (
-      e,
-      element,
-      combo,
-      seq
-    ) {
-      let tagName = element.tagName.toLowerCase();
-      let isText =
-        tagName == "imconversation" ||
-        tagName == "textbox" ||
-        tagName == "input" ||
-        tagName == "select" ||
-        tagName == "textarea" ||
-        tagName == "html:input" ||
-        tagName == "search-textbox" ||
-        tagName == "html:textarea" ||
-        (element.contentEditable && element.contentEditable == "true");
-
-      let firstCombo = combo;
-      if (seq !== undefined) {
-        firstCombo = seq.trim().split(" ")[0];
-      }
-      let modifiers = ["ctrl", "alt", "meta", "option", "command"];
-      let hasModifier = false;
-      for (let mod of modifiers) {
-        if (firstCombo.includes(mod)) {
-          hasModifier = true;
-          break;
-        }
-      }
-
-      return isText && !hasModifier;
-    };
+    win.Mousetrap.prototype.stopCallback = stopCallback;
     this.bindKeys(win);
   },
 
@@ -109,33 +158,7 @@ var TBKeys = {
       return;
     }
     for (let key of Object.keys(this.keys[type])) {
-      win.Mousetrap.bind(key, function () {
-        let command = TBKeys.keys[type][key];
-        // window is defined here so that it is available for use with eval() in
-        // the non-lite version of tbkeys
-        // eslint-disable-next-line no-unused-vars
-        let window = win;
-
-        let cmdType = command.split(":", 1)[0];
-        let cmdBody = command.slice(cmdType.length + 1);
-        switch (cmdType) {
-          case "cmd":
-            win.goDoCommand(cmdBody);
-            break;
-          case "func":
-            win[cmdBody]();
-            break;
-          case "tbkeys":
-            builtins[cmdBody](win);
-            break;
-          case "unset":
-            break;
-          default:
-            eval(command); // eslint-disable-line no-eval
-            break;
-        }
-        return false;
-      });
+      win.Mousetrap.bind(key, buildKeyCommand(win, TBKeys.keys[type][key]));
     }
   },
 
@@ -162,12 +185,7 @@ var tbkeys = class extends ExtensionCommon.ExtensionAPI {
     ExtensionSupport.unregisterWindowListener(EXTENSION_NAME);
     let windows = Services.wm.getEnumerator(null);
     while (windows.hasMoreElements()) {
-      let win = windows.getNext();
-      let type = win.document.documentElement.getAttribute("windowtype");
-      if (!tbWindowTypes.includes(type)) {
-        continue;
-      }
-      TBKeys.unloadWindowChrome(win);
+      TBKeys.unloadWindowChrome(windows.getNext());
     }
 
     if (isAppShutdown) return;

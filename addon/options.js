@@ -2,6 +2,7 @@
 /* global browser */
 var background = browser.extension.getBackgroundPage();
 
+// Save options currently in input fields if they pass validation
 async function saveOptions(e) {
   e.preventDefault();
   let settings = {};
@@ -34,6 +35,7 @@ async function saveOptions(e) {
   await restoreOptions();
 }
 
+// Restore currently stored settings to the input fields
 async function restoreOptions() {
   let settings = await background.getSettings();
   let element;
@@ -47,12 +49,14 @@ async function restoreOptions() {
   }
 }
 
+// Restore the default settings to the input fields and storage
 async function restoreDefaults(e) {
   e.preventDefault();
   await browser.storage.local.remove(background.optionNames);
   await restoreOptions();
 }
 
+// Apply "unset" to all single keys not currently set to something else
 async function unsetSingleKeys(e) {
   e.preventDefault();
   let settings = await browser.storage.local.get("mainkeys");

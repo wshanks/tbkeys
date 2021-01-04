@@ -17,6 +17,7 @@ var defaults = {
 };
 var optionNames = Object.getOwnPropertyNames(defaults);
 
+// Helper function for getSettings
 // Taken from https://thunderbird.topicbox.com/groups/addons/T46e96308f41c0de1
 const promiseWithTimeout = function (ms, promise) {
   // Create a promise that rejects in <ms> milliseconds
@@ -60,7 +61,7 @@ async function getSettings() {
   }
 
   for (let setting of optionNames) {
-    if (!Object.prototype.hasOwnProperty.call(setting, setting)) {
+    if (!Object.prototype.hasOwnProperty.call(settings, setting)) {
       settings[setting] = defaults[setting];
     }
   }
@@ -77,6 +78,7 @@ async function applyKeys() {
 
 applyKeys();
 
+// Warn about updates requiring user action
 browser.runtime.onInstalled.addListener(async (details) => {
   switch (details.reason) {
     case "update": {
