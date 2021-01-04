@@ -72,8 +72,8 @@ async function getSettings() {
 async function applyKeys() {
     let settings = await getSettings()
 
-    browser.tbkeys.bindkeys(JSON.parse(settings.mainkeys), "main")
-    browser.tbkeys.bindkeys(JSON.parse(settings.composekeys), "compose")
+    await browser.tbkeys.bindkeys(JSON.parse(settings.mainkeys), "main")
+    await browser.tbkeys.bindkeys(JSON.parse(settings.composekeys), "compose")
 }
 
 applyKeys()
