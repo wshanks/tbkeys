@@ -16,14 +16,14 @@ const EXTENSION_NAME = "tbkeys@addons.thunderbird.net";
 var extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME);
 
 var builtins = {
-  closeMessageAndRefresh: function (window) {
+  closeMessageAndRefresh: function (win) {
     if (
-      window.document.getElementById("tabmail").tabContainer.selectedIndex != 0
+      win.document.getElementById("tabmail").tabContainer.selectedIndex != 0
     ) {
-      window.CloseTabOrWindow();
+      win.CloseTabOrWindow();
     }
-    window.goDoCommand("cmd_getMsgsForAuthAccounts");
-    window.goDoCommand("cmd_expandAllThreads");
+    win.goDoCommand("cmd_getMsgsForAuthAccounts");
+    win.goDoCommand("cmd_expandAllThreads");
   },
 };
 
@@ -54,12 +54,12 @@ var TBKeys = {
     this.initialized = true;
   },
 
-  loadWindowChrome: function (window) {
+  loadWindowChrome: function (win) {
     Services.scriptloader.loadSubScript(
       extension.rootURI.resolve("modules/mousetrap.js"),
-      window
+      win
     );
-    window.Mousetrap.prototype.stopCallback = function (
+    win.Mousetrap.prototype.stopCallback = function (
       e,
       element,
       combo,
@@ -92,36 +92,41 @@ var TBKeys = {
 
       return isText && !hasModifier;
     };
-    this.bindKeys(window);
+    this.bindKeys(win);
   },
 
-  unloadWindowChrome: function (window) {
-    if (typeof window.Mousetrap != "undefined") {
-      window.Mousetrap.reset();
+  unloadWindowChrome: function (win) {
+    if (typeof win.Mousetrap != "undefined") {
+      win.Mousetrap.reset();
     }
-    delete window.Mousetrap;
+    delete win.Mousetrap;
   },
 
-  bindKeys: function (window) {
-    window.Mousetrap.reset();
-    let type = window.document.documentElement.getAttribute("windowtype");
+  bindKeys: function (win) {
+    win.Mousetrap.reset();
+    let type = win.document.documentElement.getAttribute("windowtype");
     if (!Object.prototype.hasOwnProperty.call(this.keys, type)) {
       return;
     }
     for (let key of Object.keys(this.keys[type])) {
-      window.Mousetrap.bind(key, function () {
+      win.Mousetrap.bind(key, function () {
         let command = TBKeys.keys[type][key];
+        // window is defined here so that it is available for use with eval() in
+        // the non-lite version of tbkeys
+        // eslint-disable-next-line no-unused-vars
+        let window = win;
+
         let cmdType = command.split(":", 1)[0];
         let cmdBody = command.slice(cmdType.length + 1);
         switch (cmdType) {
           case "cmd":
-            window.goDoCommand(cmdBody);
+            win.goDoCommand(cmdBody);
             break;
           case "func":
-            window[cmdBody]();
+            win[cmdBody]();
             break;
           case "tbkeys":
-            builtins[cmdBody](window);
+            builtins[cmdBody](win);
             break;
           case "unset":
             break;
@@ -142,10 +147,10 @@ var TBKeys = {
     this.keys[windowTypes[windowType]] = keys;
     var windows = Services.wm.getEnumerator(windowTypes[windowType]);
     while (windows.hasMoreElements()) {
-      let window = windows.getNext();
+      let win = windows.getNext();
 
-      if (typeof window.Mousetrap != "undefined") {
-        this.bindKeys(window);
+      if (typeof win.Mousetrap != "undefined") {
+        this.bindKeys(win);
       }
     }
   },
@@ -162,7 +167,7 @@ var tbkeys = class extends ExtensionCommon.ExtensionAPI {
       if (!tbWindowTypes.includes(type)) {
         continue;
       }
-      TBKeys.unloadWindowChrome();
+      TBKeys.unloadWindowChrome(win);
     }
 
     if (isAppShutdown) return;
