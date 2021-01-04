@@ -1,5 +1,5 @@
 "use strict";
-/* global browser, document */
+/* global browser */
 var background = browser.extension.getBackgroundPage();
 
 async function saveOptions(e) {
@@ -26,7 +26,7 @@ async function saveOptions(e) {
   }
   await browser.storage.local.set(settings);
   for (let setting of background.optionNames) {
-    if (!settings.hasOwnProperty(setting)) {
+    if (!Object.prototype.hasOwnProperty.call(settings, setting)) {
       await browser.storage.local.remove(setting);
     }
   }
@@ -56,7 +56,7 @@ async function restoreDefaults(e) {
 async function unsetSingleKeys(e) {
   e.preventDefault();
   let settings = await browser.storage.local.get("mainkeys");
-  if (!settings.hasOwnProperty("mainkeys")) {
+  if (!Object.prototype.hasOwnProperty.call(settings, "mainkeys")) {
     settings.mainkeys = background.defaults.mainkeys;
   }
   let keys = JSON.parse(settings.mainkeys);
@@ -91,7 +91,7 @@ async function unsetSingleKeys(e) {
     "[",
   ];
   for (let key of singles) {
-    if (!keys.hasOwnProperty(key)) {
+    if (!Object.prototype.hasOwnProperty.call(keys, key)) {
       keys[key] = "unset";
     }
   }

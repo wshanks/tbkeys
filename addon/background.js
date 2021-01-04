@@ -53,14 +53,14 @@ async function getSettings() {
   }
 
   // Migrate old "keys" setting to "mainkeys"
-  if (settings.hasOwnProperty("keys")) {
+  if (Object.prototype.hasOwnProperty.call(settings, "keys")) {
     settings.mainkeys = settings.keys;
     await browser.storage.local.remove("keys");
     await browser.storage.local.set({ mainkeys: settings.mainkeys });
   }
 
   for (let setting of optionNames) {
-    if (!settings.hasOwnProperty(setting)) {
+    if (!Object.prototype.hasOwnProperty.call(setting, setting)) {
       settings[setting] = defaults[setting];
     }
   }

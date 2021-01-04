@@ -105,7 +105,7 @@ var TBKeys = {
   bindKeys: function (window) {
     window.Mousetrap.reset();
     let type = window.document.documentElement.getAttribute("windowtype");
-    if (!this.keys.hasOwnProperty(type)) {
+    if (!Object.prototype.hasOwnProperty.call(this.keys, type)) {
       return;
     }
     for (let key of Object.keys(this.keys[type])) {
@@ -136,7 +136,7 @@ var TBKeys = {
 
   updateKeys: function (keys, windowType) {
     this.init();
-    if (!windowTypes.hasOwnProperty(windowType)) {
+    if (!Object.prototype.hasOwnProperty.call(windowTypes, windowType)) {
       return;
     }
     this.keys[windowTypes[windowType]] = keys;
