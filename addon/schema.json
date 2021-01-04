@@ -3,23 +3,31 @@
     "namespace": "tbkeys",
     "functions": [
       {
-        "name": "bindkeys",
+        "name": "bindKeys",
         "type": "function",
         "description": "Bind keys",
         "async": true,
         "parameters": [
           {
-            "name": "keys",
+            "name": "keyBindings",
             "type": "object",
-            "description": "Keys to bind.",
-            "additionalProperties": { "type": "string" }
-          },
-          {
-            "names": "windowType",
-            "type": "string",
-            "description": "Window type to bind keys in"
+            "description": "Mapping of window types to keys",
+            "properties": {
+              "main": { "$ref": "Keys" },
+              "compose": { "$ref": "Keys" }
+            },
+            "additionalProperties": false,
+            "required": ["main", "compose"]
           }
         ]
+      }
+    ],
+    "types": [
+      {
+        "id": "Keys",
+        "type": "object",
+        "description": "Mapping of key sequences to commands",
+        "additionalProperties": { "type": "string" }
       }
     ]
   }

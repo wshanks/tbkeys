@@ -32,6 +32,8 @@ const promiseWithTimeout = function (ms, promise) {
   return Promise.race([promise, timeout]);
 };
 
+// Retrieve user settings from storage, inserting default values and migrating
+// obsolete storage keys.
 async function getSettings() {
   let settings;
   const retries = 7;
@@ -69,13 +71,15 @@ async function getSettings() {
   return settings;
 }
 
+// Apply key bindings
 async function applyKeys() {
   let settings = await getSettings();
 
-  await browser.tbkeys.bindkeys(JSON.parse(settings.mainkeys), "main");
-  await browser.tbkeys.bindkeys(JSON.parse(settings.composekeys), "compose");
+  await browser.tbkeys.bindKeys({
+    main: JSON.parse(settings.mainkeys),
+    compose: JSON.parse(settings.composekeys),
+  });
 }
-
 applyKeys();
 
 // Warn about updates requiring user action

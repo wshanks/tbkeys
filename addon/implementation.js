@@ -30,9 +30,9 @@ var builtins = {
 
 // Table to translate internal Thunderbird window names to shorter forms
 // exposed in tbkeys' preferences.
-var windowTypes = {
-  main: "mail:3pane",
-  compose: "msgcompose",
+const WINDOW_TYPES = {
+  "mail:3pane": "main",
+  msgcompose: "compose",
 };
 
 // Function called by Mousetrap to test if it should stop processing a key event
@@ -70,7 +70,6 @@ function stopCallback(e, element, combo, seq) {
   return isText && !hasModifier;
 }
 
-
 // Build a callback function to execute a tbkeys command
 //
 // win is the window in which the command should be executed
@@ -79,40 +78,41 @@ function stopCallback(e, element, combo, seq) {
 // tbkeys, unset, or eval and body is the type-specific content of the command
 function buildKeyCommand(win, command) {
   let callback = function () {
-      // window is defined here so that it is available for use with eval() in
-      // the non-lite version of tbkeys
-      // eslint-disable-next-line no-unused-vars
-      let window = win;
+    // window is defined here so that it is available for use with eval() in
+    // the non-lite version of tbkeys
+    // eslint-disable-next-line no-unused-vars
+    let window = win;
 
-      let cmdType = command.split(":", 1)[0];
-      let cmdBody = command.slice(cmdType.length + 1);
-      switch (cmdType) {
-        case "cmd":
-          win.goDoCommand(cmdBody);
-          break;
-        case "func":
-          win[cmdBody]();
-          break;
-        case "tbkeys":
-          builtins[cmdBody](win);
-          break;
-        case "unset":
-          break;
-        default:
-          eval(command); // eslint-disable-line no-eval
-          break;
-      }
-      return false;
+    let cmdType = command.split(":", 1)[0];
+    let cmdBody = command.slice(cmdType.length + 1);
+    switch (cmdType) {
+      case "cmd":
+        win.goDoCommand(cmdBody);
+        break;
+      case "func":
+        win[cmdBody]();
+        break;
+      case "tbkeys":
+        builtins[cmdBody](win);
+        break;
+      case "unset":
+        break;
+      default:
+        eval(command); // eslint-disable-line no-eval
+        break;
     }
+    return false;
+  };
 
-  return callback
+  return callback;
 }
 
-
 var TBKeys = {
-  // Store keybindings so they can be applied to new windows that are opened
-  // after the bindings have been set
-  keys: {},
+  // keys stores keybindings so they can be applied to new windows that are
+  // opened after the bindings have been set
+  //
+  // Initialized to empty key bindings for each window type
+  keys: Object.fromEntries(Object.values(WINDOW_TYPES).map((t) => [t, {}])),
 
   // The init() function uses the `initialized` flag so that its initialization
   // code can be run only once but it can be called at the latest possible
@@ -141,7 +141,9 @@ var TBKeys = {
       win
     );
     win.Mousetrap.prototype.stopCallback = stopCallback;
-    this.bindKeys(win);
+    let type = win.document.documentElement.getAttribute("windowtype");
+    let keys = this.keys[WINDOW_TYPES[type]];
+    this.bindKeysInWindow(win, keys);
   },
 
   unloadWindowChrome: function (win) {
@@ -151,29 +153,29 @@ var TBKeys = {
     delete win.Mousetrap;
   },
 
-  bindKeys: function (win) {
+  bindKeysInWindow: function (win, keys) {
     win.Mousetrap.reset();
-    let type = win.document.documentElement.getAttribute("windowtype");
-    if (!Object.prototype.hasOwnProperty.call(this.keys, type)) {
-      return;
-    }
-    for (let key of Object.keys(this.keys[type])) {
-      win.Mousetrap.bind(key, buildKeyCommand(win, TBKeys.keys[type][key]));
+    for (let [key, command] of Object.entries(keys)) {
+      win.Mousetrap.bind(key, buildKeyCommand(win, command));
     }
   },
 
-  updateKeys: function (keys, windowType) {
+  // Set all keybindings for all windows
+  //
+  // keyBindings has the structure:
+  //   {windowType: {keySequence: keyCommand}}
+  // keyBindings should have all WINDOW_TYPES values
+  bindKeys: function (keyBindings) {
     this.init();
-    if (!Object.prototype.hasOwnProperty.call(windowTypes, windowType)) {
-      return;
-    }
-    this.keys[windowTypes[windowType]] = keys;
-    var windows = Services.wm.getEnumerator(windowTypes[windowType]);
-    while (windows.hasMoreElements()) {
-      let win = windows.getNext();
+    this.keys = keyBindings;
+    for (const [tbWinName, shortWinName] of Object.entries(WINDOW_TYPES)) {
+      let windows = Services.wm.getEnumerator(tbWinName);
+      while (windows.hasMoreElements()) {
+        let win = windows.getNext();
 
-      if (typeof win.Mousetrap != "undefined") {
-        this.bindKeys(win);
+        if (typeof win.Mousetrap != "undefined") {
+          this.bindKeysInWindow(win, this.keys[shortWinName]);
+        }
       }
     }
   },
@@ -203,8 +205,8 @@ var tbkeys = class extends ExtensionCommon.ExtensionAPI {
     return {
       tbkeys: {
         // eslint-disable-next-line require-await
-        bindkeys: async function (keys, windowType) {
-          TBKeys.updateKeys(keys, windowType);
+        bindKeys: async function (keyBindings) {
+          TBKeys.bindKeys(keyBindings);
         },
       },
     };
