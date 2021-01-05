@@ -23,14 +23,8 @@
     "tbkeys": {
       "schema": "schema.json",
       "parent": {
-        "scopes": [
-          "addon_parent"
-        ],
-        "paths": [
-          [
-            "tbkeys"
-          ]
-        ],
+        "scopes": ["addon_parent"],
+        "paths": [["tbkeys"]],
         "script": "implementation.js"
       }
     }

@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/wshanks/tbkeys#readme",
   "devDependencies": {
-    "eslint": "^6.1.0"
+    "eslint": "latest",
+    "prettier": "latest"
   }
 }

@@ -1,0 +1,7 @@
+addon/LICENSE.md
+addon/modules/
+build/
+CODE_OF_CONDUCT.md
+LICENSE.md
+node_modules/
+package-lock.json
