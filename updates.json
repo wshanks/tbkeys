@@ -28,6 +28,10 @@
         {
           "version": "2.1.1",
           "update_link": "https://github.com/wshanks/tbkeys/releases/download/v2.1.1/tbkeys.xpi"
+        },
+        {
+          "version": "2.1.2",
+          "update_link": "https://github.com/wshanks/tbkeys/releases/download/v2.1.2/tbkeys.xpi"
         }
       ]
     }
