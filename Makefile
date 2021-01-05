@@ -33,8 +33,12 @@ $(BLDDIR)/tbkeys-lite.xpi: $(SRC_FILES)
 	# Build xpi
 	cd $(dir $@)/lite; zip -FSr $(ABS_BLDDIR)/tbkeys-lite.xpi $(ADDON_FILES)
 
+lint:
+	npx prettier --write .
+	npx eslint .
+
 clean:
 	rm -f $(BLDDIR)/tbkeys*.xpi
 	rm -rf $(BLDDIR)/lite
 
-.PHONY: all clean xpi
+.PHONY: all clean xpi lint
