@@ -1,18 +1,19 @@
 'use strict'
-/* global ChromeUtils, Components */
+/* global ChromeUtils */
 
 var { ExtensionCommon } = ChromeUtils.import(
     "resource://gre/modules/ExtensionCommon.jsm"
 )
-
-var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
-
 var { ExtensionParent } = ChromeUtils.import(
     "resource://gre/modules/ExtensionParent.jsm"
 )
-var extension = ExtensionParent.GlobalManager.getExtension(
-    "tbkeys@addons.thunderbird.net"
+var { ExtensionSupport } = ChromeUtils.import(
+    "resource:///modules/ExtensionSupport.jsm"
 )
+var { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+
+const EXTENSION_NAME = "tbkeys@addons.thunderbird.net"
+var extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME)
 
 var builtins = {
     closeMessageAndRefresh: function(window) {
@@ -32,72 +33,29 @@ var tbWindowTypes = Object.values(windowTypes)
 
 var TBKeys = {
     keys: {},
+    initialized: false,
 
-    cleanup: function() {
-        let windows = Services.wm.getEnumerator(null)
-        while (windows.hasMoreElements()) {
-            let window = windows.getNext()
-            let type = window.document.documentElement.getAttribute('windowtype')
-            if (!tbWindowTypes.includes(type)) {
-                continue
-            }
-
-            if (typeof window.Mousetrap != 'undefined') {
-                window.Mousetrap.reset()
-            }
-            delete window.Mousetrap
-        }
-
-        Services.wm.removeListener(TBKeys.windowListener)
-    },
-
-    prepareWindows: function() {
-        // Load scripts for previously opened windows
-        var windows = Services.wm.getEnumerator(null)
-        while (windows.hasMoreElements()) {
-            let window = windows.getNext()
-            let type = window.document.documentElement.getAttribute('windowtype')
-            if (!tbWindowTypes.includes(type)) {
-                continue
-            }
-            this.loadWindowChrome(window)
-        }
-
-        // Add listener to load scripts in windows opened in the future
-        Services.wm.addListener(this.windowListener)
-    },
-
-    windowListener: {
-        onOpenWindow: function(xulWindow) {
-            var domWindow = xulWindow
-                .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                .getInterface(Components.interfaces.nsIDOMWindow)
-
-            domWindow.addEventListener('load', function listener() {
-                TBKeys.loadWindowChrome(domWindow)
-            }, {once: true})
-        },
-
-        onCloseWindow: function(_xulWindow) {},
-
-        onWindowTitleChange: function(_xulWindow, _newTitle) {}
-    },
-
-    loadWindowChrome: async function(window) {
-        if (window.document.readyState != "complete") {
-            await new Promise((resolve) => {
-                window.addEventListener("load", resolve, {once: true})
-            })
-        }
-
-        this.loadWindowChromeWhenReady(window)
-    },
-
-    loadWindowChromeWhenReady: function(window) {
-        let type = window.document.documentElement.getAttribute('windowtype')
-        if (!tbWindowTypes.includes(type)) {
+    init: function() {
+        if (this.initialized) {
             return
         }
+        ExtensionSupport.registerWindowListener(
+            EXTENSION_NAME,
+            {
+                chromeURLs: [
+                    "chrome://messenger/content/messengercompose/messengercompose.xul",
+                    "chrome://messenger/content/messengercompose/messengercompose.xhtml",
+                    "chrome://messenger/content/messenger.xul",
+                    "chrome://messenger/content/messenger.xhtml"
+                ],
+                onLoadWindow: TBKeys.loadWindowChrome.bind(TBKeys),
+                onUnloadWindow: TBKeys.unloadWindowChrome
+            }
+        )
+        this.initialized = true
+    },
+
+    loadWindowChrome: function(window) {
         Services.scriptloader.loadSubScript(
             extension.rootURI.resolve("modules/mousetrap.js"),
             window
@@ -129,6 +87,13 @@ var TBKeys = {
             return isText && !hasModifier
         }
         this.bindKeys(window)
+    },
+
+    unloadWindowChrome: function(window) {
+        if (typeof window.Mousetrap != 'undefined') {
+            window.Mousetrap.reset()
+        }
+        delete window.Mousetrap
     },
 
     bindKeys: function(window) {
@@ -164,6 +129,7 @@ var TBKeys = {
     },
 
     updateKeys: function(keys, windowType) {
+        this.init()
         if (!windowTypes.hasOwnProperty(windowType)) {
             return
         }
@@ -179,12 +145,32 @@ var TBKeys = {
     }
 }
 
-TBKeys.prepareWindows()
 
 var tbkeys = class extends ExtensionCommon.ExtensionAPI {  // eslint-disable-line no-unused-vars
-    getAPI(context) {
-        context.callOnClose(this)
 
+    onShutdown(isAppShutdown) {
+        ExtensionSupport.unregisterWindowListener(EXTENSION_NAME)
+        let windows = Services.wm.getEnumerator(null)
+        while (windows.hasMoreElements()) {
+            let win = windows.getNext()
+            let type = win.document.documentElement.getAttribute('windowtype')
+            if (!tbWindowTypes.includes(type)) {
+                continue
+            }
+            TBKeys.unloadWindowChrome(win);
+        }
+
+        if (isAppShutdown) return;
+
+        // Thunderbird might still cache some of your JavaScript files and even
+        // if JSMs have been unloaded, the last used version could be reused on
+        // next load, ignoring any changes. Get around this issue by
+        // invalidating the caches (this is identical to restarting TB with the
+        // -purgecaches parameter):
+        Services.obs.notifyObservers(null, "startupcache-invalidate", null)
+    }
+
+    getAPI(context) {  // eslint-disable-line no-unused-vars
         return {
             tbkeys: {
                 bindkeys: async function(keys, windowType) {  // eslint-disable-line require-await
@@ -194,14 +180,4 @@ var tbkeys = class extends ExtensionCommon.ExtensionAPI {  // eslint-disable-lin
         }
     }
 
-    close() {
-        TBKeys.cleanup()
-
-        // Thunderbird might still cache some of your JavaScript files and even
-        // if JSMs have been unloaded, the last used version could be reused on
-        // next load, ignoring any changes. Get around this issue by
-        // invalidating the caches (this is identical to restarting TB with the
-        // -purgecaches parameter):
-        Services.obs.notifyObservers(null, "startupcache-invalidate", null)
-    }
 }
