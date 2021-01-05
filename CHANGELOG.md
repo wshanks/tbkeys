@@ -1,3 +1,7 @@
+- 2.1.2:
+
+  - Code changes to avoid tbkeys failing to load on startup
+
 - 2.1.1:
 
   - Fix keys being captured in some textboxes like the signature box in settings.
