@@ -1,0 +1,26 @@
+name: Check code for errors and style
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Configure npm caching
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Install dependencies
+        run: npm ci
+      - name: Run prettier
+        run: |-
+          npx --no-install prettier --check .
+      - name: Run eslint
+        run: |-
+          npx --no-install eslint .
+        if: "! cancelled()"
