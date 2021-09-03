@@ -52,6 +52,7 @@ function stopCallback(e, element, combo, seq) {
     tagName == "html:input" ||
     tagName == "search-textbox" ||
     tagName == "html:textarea" ||
+    tagName == "browser" ||
     (element.contentEditable && element.contentEditable == "true");
 
   let firstCombo = combo;
