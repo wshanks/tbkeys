@@ -1,3 +1,7 @@
+- 2.1.3:
+
+  - Do not capture keys in Thunderbird's builtin web browser
+
 - 2.1.2:
 
   - Code changes to avoid tbkeys failing to load on startup
