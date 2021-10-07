@@ -11,6 +11,8 @@
 - Click on the gear icon in the upper right and choose "Install Add-on From File..." and then select the downloaded tbkeys.xpi file.
 - The add-on will self-update from the GitHub releases page when future updates are released.
 
+The [tbkeys-lite](#tbkeys-lite) version of the addon can also be installed from addons.thunderbird.net by searching for "tbkeys-lite" in the Thunderbird addons manager or by downloading the xpi file from [this page](https://addons.thunderbird.net/en-US/thunderbird/addon/tbkeys-lite/) and following the steps above.
+
 ## Default key bindings
 
 The default key bindings for the main window are modeled on GMail's key bindings.
@@ -81,6 +83,6 @@ Here are some examples of eval commands for commonly desired key bindings:
 The "Unset singles" button in the preferences pane can be used to unset Thunderbird's default single key bindings in the main window.
 This function set all of Thunderbird's default single key shortcuts to `unset` unless they are currently set in tbkey's preferences (that is, it won't overwrite tbkeys' existing settings for single key shortcuts).
 
-## tbkeys and tbkeys-lite
+## <a name="tbkeys-lite"></a>tbkeys and tbkeys-lite
 
 tbkeys-lite is a version of tbkeys with the ability to execute arbitrary javascript removed.
