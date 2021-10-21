@@ -53,6 +53,10 @@ function stopCallback(e, element, combo, seq) {
     tagName == "search-textbox" ||
     tagName == "html:textarea" ||
     tagName == "browser" ||
+    // This is for the description box of calendar events when the new event
+    // pane is opened as a tab instead of a separate window. A better way to
+    // identify this element as an editable text field would be nice.
+    (tagName == "body" && element["spellcheck"] !== undefined) ||
     (element.contentEditable && element.contentEditable == "true");
 
   let firstCombo = combo;
