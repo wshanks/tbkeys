@@ -1,3 +1,7 @@
+- 2.1.4:
+
+  - Do not capture keys in the text fields of the New Event tab
+
 - 2.1.3:
 
   - Do not capture keys in Thunderbird's builtin web browser
