@@ -93,3 +93,6 @@ browser.runtime.onInstalled.addListener(async (details) => {
     }
   }
 });
+browser.tbkeys.onSendMessage.addListener(async (extensionID, message) => {
+  browser.runtime.sendMessage(extensionID, message);
+});

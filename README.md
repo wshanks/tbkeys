@@ -50,16 +50,18 @@ Here are some things to consider when setting key bindings:
 A few different styles of commands can be specified for key bindings.
 They are:
 
-- **Simple commands**: These follow the format `cmd:<command_name>` where `<command_name>` is a command that Thunderbird can execute with `goDoCommand()`.
+- **Simple commands**: These commands follow the format `cmd:<command_name>` where `<command_name>` is a command that Thunderbird can execute with `goDoCommand()`.
   Most command names can be found in [the main command set file](https://hg.mozilla.org/comm-central/file/tip/mail/base/content/mainCommandSet.inc.xhtml) of the Thunderbird source code.
-- **Simple function calls**: These follow the format `func:<func_name>` where `<func_name>` is a function defined on the Thunderbird window object.
+- **Simple function calls**: These commands follow the format `func:<func_name>` where `<func_name>` is a function defined on the Thunderbird window object.
   That function is called without any arguments.
-- **Custom function calls**: The follow the format `tbkeys:<func_name>` where `<func_name>` is the name of a custom function written in tbkeys.
+- **Custom function calls**: These commands follow the format `tbkeys:<func_name>` where `<func_name>` is the name of a custom function written in tbkeys.
   Currently, the only available custom function is `closeMessageAndRefresh` which closes the open tab if it is not the first tab and then refreshes all accounts.
   This behavior mimics the behavior of the GMail keybinding `u`.
 - **Unset binding**: These entries simply contain the text `unset`.
   When an `unset` keybinding is triggered, nothing happens.
   This can be useful unbinding built-in Thunderbird key bindings which you do not wish to trigger by accident.
+- **MailExtension messages**: These commands follow the format `memsg:<extensionID>:<message>` where `<extensionID>` is the ID of the Thunderbird extension to which to send a message and `<message>` is a string message to send to the extension using the `browser.runtime.sendMessage()` MailExtension API.
+  Currently, only string messages are supported because `tbkeys` stores its commands as strings, though that restriction could possibly be relaxed in the future.
 - **Eval commands**: These entries may contain arbitrary javascript code on which tbkeys will call `eval()` when the key binding is triggered.
   Any entry not matching the prefixes of the other command types is treated as an eval command.
   **NOTE:** eval commands are not available in tbkeys-lite and will function the same as unset commands instead.
