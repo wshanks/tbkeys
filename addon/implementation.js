@@ -113,6 +113,9 @@ function buildKeyCommand(win, command) {
       case "tbkeys":
         builtins[cmdBody](win);
         break;
+      case "memsg":
+        Services.obs.notifyObservers(null, "tbkeys-memsg", cmdBody);
+        break;
       case "unset":
         break;
       default:
@@ -136,6 +139,7 @@ var TBKeys = {
   // code can be run only once but it can be called at the latest possible
   // moment (at the first usage of the experiment API).
   initialized: false,
+  meMsgCallback: null,
   init: function () {
     if (this.initialized) {
       return;
@@ -197,6 +201,21 @@ var TBKeys = {
       }
     }
   },
+
+  MEMsgObserver: {
+    observe: function (subject, topic, data) {
+      switch (topic) {
+        case "tbkeys-memsg":
+          if (TBKeys.meMsgCallback !== null) {
+            let extensionID = data.split(":", 1)[0];
+            let message = data.slice(extensionID.length + 1);
+            TBKeys.meMsgCallback(extensionID, message);
+          }
+          break;
+        default:
+      }
+    },
+  },
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -226,6 +245,24 @@ var tbkeys = class extends ExtensionCommon.ExtensionAPI {
         bindKeys: async function (keyBindings) {
           TBKeys.bindKeys(keyBindings);
         },
+        onSendMessage: new ExtensionCommon.EventManager({
+          context,
+          name: "tbkeys.onSendMessage",
+          register: (fire) => {
+            TBKeys.meMsgCallback = (extensionID, message) => {
+              fire.async(extensionID, message);
+            };
+            Services.obs.addObserver(
+              TBKeys.MEMsgObserver,
+              "tbkeys-memsg",
+              false
+            );
+            return () => {
+              Services.obs.removeObserver(TBKeys.MEMsgObserver, "tbkeys-memsg");
+              TBKeys.meMsgCallback = null;
+            };
+          },
+        }).api(),
       },
     };
   }

@@ -1,6 +1,25 @@
 [
   {
     "namespace": "tbkeys",
+    "events": [
+      {
+        "name": "onSendMessage",
+        "type": "function",
+        "description": "Event marking when tbkeys wants a message sent to another MailExtension",
+        "parameters": [
+          {
+            "name": "extensionID",
+            "description": "ID of extension to send message to",
+            "type": "string"
+          },
+          {
+            "name": "message",
+            "description": "Message to send to extension",
+            "type": "any"
+          }
+        ]
+      }
+    ],
     "functions": [
       {
         "name": "bindKeys",
