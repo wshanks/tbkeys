@@ -10,7 +10,7 @@
   "name": "tbkeys",
   "description": "Custom Thunderbird keybindings",
   "author": "Will Shanks",
-  "version": "2.1.4",
+  "version": "2.2.0",
   "background": {
     "scripts": ["background.js"]
   },
