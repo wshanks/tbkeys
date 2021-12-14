@@ -1,3 +1,7 @@
+- 2.2.0:
+
+  - Support for sending messages to other extensions
+
 - 2.1.4:
 
   - Do not capture keys in the text fields of the New Event tab
