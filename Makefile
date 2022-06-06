@@ -23,7 +23,8 @@ $(BLDDIR)/tbkeys-lite.xpi: $(SRC_FILES)
 	cp -r addon $(dir $@)/lite
 	# Drop update_url
 	sed -i '/update_url/d' $(dir $@)/lite/manifest.json
-	sed -i 's/\( *"strict_min_version".*\),$$/\1/' $(dir $@)/lite/manifest.json
+	sed -i 's/\( *"strict_min_version".*\),$$/\1,/' $(dir $@)/lite/manifest.json
+	sed -i 's/\( *"strict_max_version": \)\(.*\),$$/\1"103.0"/' $(dir $@)/lite/manifest.json
 	# Drop eval()
 	sed -i 's#^\( *\)eval(.*#\1// Do nothing#' $(dir $@)/lite/implementation.js
 	# Change name

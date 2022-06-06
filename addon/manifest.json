@@ -4,6 +4,7 @@
     "gecko": {
       "id": "tbkeys@addons.thunderbird.net",
       "strict_min_version": "68.0",
+      "strict_max_version": "*",
       "update_url": "https://raw.githubusercontent.com/wshanks/tbkeys/main/updates.json"
     }
   },
