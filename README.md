@@ -1,6 +1,6 @@
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 
-# tbkeys
+# <a name="intro"></a>tbkeys
 
 `tbkeys` is an add-on for Thunderbird that uses [Mousetrap](https://craig.is/killing/mice) to bind key sequences to custom commands.
 
@@ -62,7 +62,7 @@ They are:
   This can be useful unbinding built-in Thunderbird key bindings which you do not wish to trigger by accident.
 - **MailExtension messages**: These commands follow the format `memsg:<extensionID>:<message>` where `<extensionID>` is the ID of the Thunderbird extension to which to send a message and `<message>` is a string message to send to the extension using the `browser.runtime.sendMessage()` MailExtension API.
   Currently, only string messages are supported because `tbkeys` stores its commands as strings, though that restriction could possibly be relaxed in the future.
-- **Eval commands**: These entries may contain arbitrary javascript code on which tbkeys will call `eval()` when the key binding is triggered.
+- <a name="eval"></a>**Eval commands**: These entries may contain arbitrary javascript code on which tbkeys will call `eval()` when the key binding is triggered.
   Any entry not matching the prefixes of the other command types is treated as an eval command.
   **NOTE:** eval commands are not available in tbkeys-lite and will function the same as unset commands instead.
 
@@ -88,3 +88,28 @@ This function set all of Thunderbird's default single key shortcuts to `unset` u
 ## <a name="tbkeys-lite"></a>tbkeys and tbkeys-lite
 
 tbkeys-lite is a version of tbkeys with the ability to execute arbitrary javascript removed.
+
+## Security, privacy, and implementation
+
+Before installation, Thunderbird will prompt about the extension requiring permission to "Have full, unrestricted access to Thunderbird, and your computer."
+The reason for this permission request is that tbkeys must inject a key listener into the Thunderbird user interface in order to listen for key bindings.
+To do this, tbkeys uses the older Thunderbird extension interface that predates MailExtensions.
+This interface is what all extensions used prior to Thunderbird 68.
+The new MailExtensions APIs which provide tighter control on what extensions can do do not have a keyboard shortcut API.
+If you are interested in seeing a keyboard shortcut API added to Thunderbird, please consider contributing code to the project.
+Perhaps [this ticket](https://bugzilla.mozilla.org/show_bug.cgi?id=1591730) in the Thunderbird issue tracker could be a starting point.
+
+To discuss the security considerations related to tbkeys further, it is necessary to review its implementation.
+As mentioned in the [intro](#intro), tbkeys relies on the Mousetrap library for managing the keybindings.
+The bulk of the logic of tbkeys is in [implementation.js](addon/implementation.js) which is a [MailExtension experiment](https://developer.thunderbird.net/add-ons/mailextensions/experiments).
+`implementation.js` sets up the experiment API which can be called by tbkey's standard (restricted in scope) MailExtension to bind keyboard shortcuts to functions (including a null function for unbinding) and to messages to send to other extensions.
+`implementation.js` also loads Mousetrap into each Thunderbird window, tweaks the conditions upon which Mousetrap captures a key even to account for Thunderbird specific UI elements, and defines the function that executes what the user specifies for each key binding.
+That is all that `implementation.js` does.
+It does not access the local file system or any message data and does not access the network.
+
+One of the command modes tbkeys supports is [eval](#eval).
+This mode uses `eval()` to execute arbitrary code provided by the user in `implementation.js` with full access to Thunderbird's internals.
+If one does not need to bind to arbitrary code, perhaps there is some security gained by using [tbkeys-lite](#tbkeys-lite) which does not support eval commands.
+tbkeys-lite is the version published on [Thunderbird's Add-ons page](https://addons.thunderbird.net/en-US/thunderbird/addon/tbkeys-lite/).
+Add-ons published there undergo an independent manual review.
+Having that barrier of review between yourself and the developer provides an added layer of security.
