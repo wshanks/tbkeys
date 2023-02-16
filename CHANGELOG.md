@@ -1,3 +1,7 @@
+- 2.2.1:
+
+  - Mark tbkeys-lite as supporting Thunderbird 103
+
 - 2.2.0:
 
   - Support for sending messages to other extensions
