@@ -1,8 +1,8 @@
 - 2.2.2:
 
-  - Mark tbkeys-lite as supporting Thunderbird 102.* instead of 103.0.
+  - Mark tbkeys-lite as supporting Thunderbird 102.\* instead of 103.0.
     This specification is preferred by addons.thunderbird.net.
-  It does not correspond to the actual maximum verison for which tbkeys works.
+    It does not correspond to the actual maximum verison for which tbkeys works.
 
 - 2.2.1:
 
