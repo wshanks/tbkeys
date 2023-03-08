@@ -11,7 +11,7 @@
   "name": "tbkeys",
   "description": "Custom Thunderbird keybindings",
   "author": "Will Shanks",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "background": {
     "scripts": ["background.js"]
   },
