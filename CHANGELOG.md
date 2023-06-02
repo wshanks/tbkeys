@@ -1,3 +1,7 @@
+- 2.2.3b1:
+
+  - Do not capture kesy in the search box of Thunderbird 113+
+
 - 2.2.2:
 
   - Mark tbkeys-lite as supporting Thunderbird 102.\* instead of 103.0.
