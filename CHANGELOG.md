@@ -1,5 +1,6 @@
 - 2.2.3b1:
 
+  - Mark tbkeys-list as supporting Thunderbird 115
   - Do not capture kesy in the search box of Thunderbird 113+
 
 - 2.2.2:
