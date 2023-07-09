@@ -1,4 +1,4 @@
-- 2.2.3b1:
+- 2.2.3:
 
   - Mark tbkeys-list as supporting Thunderbird 115
   - Update references to Services API to be compatible with Thunderbird 117
