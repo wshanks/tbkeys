@@ -1,6 +1,6 @@
 {
   "name": "tbkeys",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Thunderbird keys",
   "main": "index.js",
   "directories": {
