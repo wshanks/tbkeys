@@ -52,7 +52,7 @@ function stopCallback(e, element, combo, seq) {
     tagName == "select" ||
     tagName == "textarea" ||
     tagName == "html:input" ||
-    tagName == "search-textbox" ||
+    tagName == "xul:search-textbox" ||
     tagName == "html:textarea" ||
     tagName == "browser" ||
     tagName == "global-search-bar" ||
