@@ -1,3 +1,7 @@
+- 2.2.4dev:
+
+  - Do not capture keys in the quick search box on Thunderbird 115+
+
 - 2.2.3:
 
   - Mark tbkeys-list as supporting Thunderbird 115
