@@ -1,4 +1,4 @@
-- 2.2.4dev:
+- 2.2.4:
 
   - Do not capture keys in the quick search box on Thunderbird 115+
 
