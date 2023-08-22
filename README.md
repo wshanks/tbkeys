@@ -75,10 +75,12 @@ Here are some examples of eval commands for commonly desired key bindings:
 - **Close tab**: `func:CloseTabOrWindow`
 - **Scroll message list down**: `window.document.getElementById('threadTree').scrollByLines(1)`
 - **Scroll message list up**: `window.document.getElementById('threadTree').scrollByLines(-1)`
-- **Scroll message body down**: `window.document.getElementById('messagepane').contentDocument.documentElement.getElementsByTagName('body')[0].scrollBy(0, 100)`
-- **Scroll message body down** (v115+): `window.gTabmail.currentAboutMessage.getMessagePaneBrowser().contentWindow.scrollBy(0, 100)`
-- **Scroll message body up**: `window.document.getElementById('messagepane').contentDocument.documentElement.getElementsByTagName('body')[0].scrollBy(0, -100)`
-- **Scroll message body up** (v115+): `window.gTabmail.currentAboutMessage.getMessagePaneBrowser().contentWindow.scrollBy(0, -100)`
+- **Scroll message body down**:
+    - v115+: `window.gTabmail.currentAboutMessage.getMessagePaneBrowser().contentWindow.scrollBy(0, 100)`
+    - v102: `window.document.getElementById('messagepane').contentDocument.documentElement.getElementsByTagName('body')[0].scrollBy(0, 100)`
+- **Scroll message body up**:
+    - v115+: `window.gTabmail.currentAboutMessage.getMessagePaneBrowser().contentWindow.scrollBy(0, -100)`
+    - v102: `window.document.getElementById('messagepane').contentDocument.documentElement.getElementsByTagName('body')[0].scrollBy(0, -100)`
 - **Create new folder**: `window.goDoCommand('cmd_newFolder')`
 - **Subscribe to feed**: `window.openSubscriptionsDialog(window.GetSelectedMsgFolders()[0])`
 
