@@ -57,6 +57,7 @@ function stopCallback(e, element, combo, seq) {
     tagName == "html:textarea" ||
     tagName == "browser" ||
     tagName == "global-search-bar" ||
+    tagName == "search-bar" ||
     (element.contentEditable && element.contentEditable == "true");
 
   if (!isText && element.contentEditable == "inherit") {
