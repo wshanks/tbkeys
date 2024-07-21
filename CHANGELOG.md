@@ -1,3 +1,7 @@
+- 2.2.5:
+
+  - Do not capture keys in the quick search box in Thunderbird 128+
+
 - 2.2.4:
 
   - Do not capture keys in the quick search box on Thunderbird 115+
