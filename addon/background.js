@@ -82,17 +82,6 @@ async function applyKeys() {
 }
 applyKeys();
 
-// Warn about updates requiring user action
-browser.runtime.onInstalled.addListener(async (details) => {
-  switch (details.reason) {
-    case "update": {
-      if (details.previousVersion.split(".")[0] < 2) {
-        const url = browser.runtime.getURL("update_v2.0.html");
-        await browser.tabs.create({ url });
-      }
-    }
-  }
-});
 browser.tbkeys.onSendMessage.addListener(async (extensionID, message) => {
   browser.runtime.sendMessage(extensionID, message);
 });

@@ -1,5 +1,5 @@
 "use strict";
-/* global ChromeUtils */
+/* global ChromeUtils, Services */
 
 var { ExtensionCommon } = ChromeUtils.import(
   "resource://gre/modules/ExtensionCommon.jsm"
@@ -10,9 +10,6 @@ var { ExtensionParent } = ChromeUtils.import(
 var { ExtensionSupport } = ChromeUtils.import(
   "resource:///modules/ExtensionSupport.jsm"
 );
-var Services =
-  globalThis.Services ||
-  ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
 const EXTENSION_NAME = "tbkeys@addons.thunderbird.net";
 var extension = ExtensionParent.GlobalManager.getExtension(EXTENSION_NAME);

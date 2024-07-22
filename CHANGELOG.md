@@ -1,3 +1,9 @@
+- 2.3.0:
+
+  - Drop support for versions of Thunderbird older than 115.
+    Those versions can continue using 2.2.5.
+    This change is mainly a precaution to acknowledge that those older versions are not tested as part of development and could be broken by future updates (it also fulfills a request from addons.thunderbird.net).
+
 - 2.2.5:
 
   - Do not capture keys in the quick search box in Thunderbird 128+
