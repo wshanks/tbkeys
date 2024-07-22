@@ -121,7 +121,7 @@ function buildKeyCommand(win, command) {
       case "unset":
         break;
       default:
-        eval(command); // eslint-disable-line no-eval
+        eval(command);
         break;
     }
     return false;
@@ -239,11 +239,9 @@ var tbkeys = class extends ExtensionCommon.ExtensionAPI {
     Services.obs.notifyObservers(null, "startupcache-invalidate", null);
   }
 
-  // eslint-disable-next-line no-unused-vars
   getAPI(context) {
     return {
       tbkeys: {
-        // eslint-disable-next-line require-await
         bindKeys: async function (keyBindings) {
           TBKeys.bindKeys(keyBindings);
         },
