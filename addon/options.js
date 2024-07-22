@@ -113,7 +113,7 @@ function validateKeys() {
         JSON.parse(keysField.value);
       }
       keysField.setCustomValidity("");
-    } catch (err) {
+    } catch {
       keysField.setCustomValidity("Invalid JSON");
       valid = false;
     }
