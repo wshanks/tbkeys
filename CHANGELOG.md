@@ -1,3 +1,8 @@
+- 2.4.0:
+
+  - Drop support for versions of Thunderbird older than 128 and fix compatibility with Thunderbird 136.
+    Those versions can continue using 2.3.0.
+
 - 2.3.0:
 
   - Drop support for versions of Thunderbird older than 115.
