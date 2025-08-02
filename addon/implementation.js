@@ -42,6 +42,9 @@ const WINDOW_TYPES = {
 // modifiers other than shift.
 function stopCallback(e, element, combo, seq) {
   let tagName = element.tagName.toLowerCase();
+  // Uncomment the following line to debug why tbkeys is triggering in an input
+  // field where it should not trigger:
+  // Services.console.logStringMessage(`tbkeys triggered by tag ${tagName}`)
   let isText =
     tagName == "imconversation" ||
     tagName == "textbox" ||
@@ -55,6 +58,7 @@ function stopCallback(e, element, combo, seq) {
     tagName == "browser" ||
     tagName == "global-search-bar" ||
     tagName == "search-bar" ||
+    tagName == "moz-input-search" ||
     (element.contentEditable && element.contentEditable == "true");
 
   if (!isText && element.contentEditable == "inherit") {
