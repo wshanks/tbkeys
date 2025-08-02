@@ -78,6 +78,13 @@
           "applications": {
             "gecko": { "strict_min_version": "128.0" }
           }
+        },
+        {
+          "version": "2.4.1",
+          "update_link": "https://github.com/wshanks/tbkeys/releases/download/v2.4.1/tbkeys.xpi",
+          "applications": {
+            "gecko": { "strict_min_version": "128.0" }
+          }
         }
       ]
     }
