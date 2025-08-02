@@ -1,3 +1,7 @@
+- 2.4.1:
+
+  - Prevent triggering in the addons search box in Thunderbird 141.
+
 - 2.4.0:
 
   - Drop support for versions of Thunderbird older than 128 and fix compatibility with Thunderbird 136.
