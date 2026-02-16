@@ -1,3 +1,7 @@
+- 2.4.2:
+
+  - Prevent triggering in the Account Hub text input fields in Thunderbird 140.
+
 - 2.4.1:
 
   - Prevent triggering in the addons search box in Thunderbird 141.
