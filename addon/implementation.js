@@ -59,6 +59,7 @@ function stopCallback(e, element, combo, seq) {
     tagName == "global-search-bar" ||
     tagName == "search-bar" ||
     tagName == "moz-input-search" ||
+    tagName == "account-hub-container" ||
     (element.contentEditable && element.contentEditable == "true");
 
   if (!isText && element.contentEditable == "inherit") {
