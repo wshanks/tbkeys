@@ -35,11 +35,6 @@ const WINDOW_TYPES = {
 };
 
 // Function called by Mousetrap to test if it should stop processing a key event
-//
-// This function is based on the default callback in Mousetrap but is extended
-// to include more text input fields that are specific to Thunderbird.
-// Additionally, it does not ignore text fields if the first key includes
-// modifiers other than shift.
 function stopCallback(e, element, combo, seq) {
   let tagName = element.tagName.toLowerCase();
   // Uncomment the following line to debug why tbkeys is triggering in an input
@@ -99,8 +94,8 @@ function stopCallback(e, element, combo, seq) {
 //
 // win is the window in which the command should be executed
 //
-// command should be a string formatted as type:body where type is cmd, func,
-// tbkeys, unset, or eval and body is the type-specific content of the command
+// command should be a string formatted as type:body OR an array of strings.
+// Modified to support multiple commands in an array.
 function buildKeyCommand(win, command) {
   let callback = function () {
     // window is defined here so that it is available for use with eval() in
@@ -108,27 +103,40 @@ function buildKeyCommand(win, command) {
     // eslint-disable-next-line no-unused-vars
     let window = win;
 
-    let cmdType = command.split(":", 1)[0];
-    let cmdBody = command.slice(cmdType.length + 1);
-    switch (cmdType) {
-      case "cmd":
-        win.goDoCommand(cmdBody);
-        break;
-      case "func":
-        win[cmdBody]();
-        break;
-      case "tbkeys":
-        builtins[cmdBody](win);
-        break;
-      case "memsg":
-        Services.obs.notifyObservers(null, "tbkeys-memsg", cmdBody);
-        break;
-      case "unset":
-        break;
-      default:
-        eval(command);
-        break;
+    // Internal helper to execute a single command string
+    const runSingleCommand = (cmdStr) => {
+        let cmdType = cmdStr.split(":", 1)[0];
+        let cmdBody = cmdStr.slice(cmdType.length + 1);
+        switch (cmdType) {
+          case "cmd":
+            win.goDoCommand(cmdBody);
+            break;
+          case "func":
+            win[cmdBody]();
+            break;
+          case "tbkeys":
+            builtins[cmdBody](win);
+            break;
+          case "memsg":
+            Services.obs.notifyObservers(null, "tbkeys-memsg", cmdBody);
+            break;
+          case "unset":
+            break;
+          default:
+            eval(cmdStr);
+            break;
+        }
+    };
+
+    // If command is an array, iterate and execute each. Otherwise, execute once.
+    if (Array.isArray(command)) {
+        for (let singleCmd of command) {
+            runSingleCommand(singleCmd);
+        }
+    } else {
+        runSingleCommand(command);
     }
+
     return false;
   };
 
@@ -192,7 +200,7 @@ var TBKeys = {
   // Set all keybindings for all windows
   //
   // keyBindings has the structure:
-  //   {windowType: {keySequence: keyCommand}}
+  //    {windowType: {keySequence: keyCommand}}
   // keyBindings should have all WINDOW_TYPES values
   bindKeys: function (keyBindings) {
     this.init();

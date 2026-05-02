@@ -46,7 +46,7 @@
         "id": "Keys",
         "type": "object",
         "description": "Mapping of key sequences to commands",
-        "additionalProperties": { "type": "string" }
+        "additionalProperties": { "type": "any" }
       }
     ]
   }
