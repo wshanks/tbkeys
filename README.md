@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=wshanks&project=tbkeys&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
 
 # <a name="intro"></a>tbkeys
