@@ -1,3 +1,7 @@
+- 2.4.4:
+
+  - Increase maximum listed version of Thunderbird for tbkeys-lite to 153
+
 - 2.4.3:
 
   - Increase maximum listed version of Thunderbird for tbkeys-lite to 149
