@@ -165,9 +165,9 @@ var TBKeys = {
   },
 
   loadWindowChrome: function (win) {
-    Services.scriptloader.loadSubScript(
+    Services.scriptloader.loadSubScriptWithOptions(
       extension.rootURI.resolve("modules/mousetrap.js"),
-      win
+      { target: win, allowUnsafeURL: true }
     );
     win.Mousetrap.prototype.stopCallback = stopCallback;
     let type = win.document.documentElement.getAttribute("windowtype");
