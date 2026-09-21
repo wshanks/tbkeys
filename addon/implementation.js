@@ -34,6 +34,51 @@ const WINDOW_TYPES = {
   msgcompose: "compose",
 };
 
+// Element names that always count as text-entry targets, no matter where in
+// the event path they appear (see isTextTargetInPath below).
+const TEXT_TARGET_TAGS = [
+  "imconversation",
+  "textbox",
+  "input",
+  "select",
+  "textarea",
+  "html:input",
+  "search-textbox",
+  "xul:search-textbox",
+  "html:textarea",
+  "browser",
+  "global-search-bar",
+  "search-bar",
+  "moz-input-search",
+  "account-hub-container",
+  // Thunderbird Conversations (gconversation@xulforum.org) renders its
+  // quick-reply editor inside nested open shadow roots:
+  //   <compose-widget> -> <text-area class="body"> -> <textarea>
+  // Key events from the editor retarget to a host element by the time they
+  // reach the chrome window, so a single-tagName check never sees the
+  // underlying textarea/input.
+  "compose-widget",
+  "text-area",
+  "text-box",
+];
+
+function isTextTargetInPath(path) {
+  for (let node of path) {
+    if (!node || typeof node.tagName != "string") {
+      continue;
+    }
+    if (TEXT_TARGET_TAGS.includes(node.tagName.toLowerCase())) {
+      return true;
+    }
+    // Content-editable regions anywhere in the path (covers designMode
+    // editors whose target reports contentEditable "inherit").
+    if (node.isContentEditable === true) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // Function called by Mousetrap to test if it should stop processing a key event
 //
 // This function is based on the default callback in Mousetrap but is extended
@@ -46,20 +91,7 @@ function stopCallback(e, element, combo, seq) {
   // field where it should not trigger:
   // Services.console.logStringMessage(`tbkeys triggered by tag ${tagName}`)
   let isText =
-    tagName == "imconversation" ||
-    tagName == "textbox" ||
-    tagName == "input" ||
-    tagName == "select" ||
-    tagName == "textarea" ||
-    tagName == "html:input" ||
-    tagName == "search-textbox" ||
-    tagName == "xul:search-textbox" ||
-    tagName == "html:textarea" ||
-    tagName == "browser" ||
-    tagName == "global-search-bar" ||
-    tagName == "search-bar" ||
-    tagName == "moz-input-search" ||
-    tagName == "account-hub-container" ||
+    TEXT_TARGET_TAGS.includes(tagName) ||
     (element.contentEditable && element.contentEditable == "true");
 
   if (!isText && element.contentEditable == "inherit") {
@@ -77,6 +109,20 @@ function stopCallback(e, element, combo, seq) {
         break;
       }
     }
+  }
+
+  // Shadow-DOM editors (e.g. Conversations' <compose-widget> quick reply):
+  // the target seen in the chrome document is a retargeted host, so scan the
+  // full composed path for any text-entry context instead of trusting the
+  // single target tagName.
+  if (!isText && typeof e.composedPath == "function") {
+    let path = [];
+    try {
+      path = e.composedPath();
+    } catch (ex) {
+      path = [];
+    }
+    isText = isTextTargetInPath(path);
   }
 
   let firstCombo = combo;
