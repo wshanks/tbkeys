@@ -46,7 +46,6 @@ const TEXT_TARGET_TAGS = [
   "search-textbox",
   "xul:search-textbox",
   "html:textarea",
-  "browser",
   "global-search-bar",
   "search-bar",
   "moz-input-search",
@@ -61,6 +60,14 @@ const TEXT_TARGET_TAGS = [
   "text-area",
   "text-box",
 ];
+
+// NOTE: "browser" is deliberately NOT in the path-scan list. A message-list
+// keypress carries the sibling message-pane <browser> in its composed path,
+// so scanning for "browser" suppresses every thread-pane key as text-entry
+// (all bindings silently dead, zero console errors). "browser" remains a
+// direct-target check below (upstream parity: focus sitting directly on a
+// browser element), where it is exact, not ancestral.
+const DIRECT_TARGET_ONLY_TAGS = ["browser"];
 
 function isTextTargetInPath(path) {
   for (let node of path) {
@@ -92,6 +99,7 @@ function stopCallback(e, element, combo, seq) {
   // Services.console.logStringMessage(`tbkeys triggered by tag ${tagName}`)
   let isText =
     TEXT_TARGET_TAGS.includes(tagName) ||
+    DIRECT_TARGET_ONLY_TAGS.includes(tagName) ||
     (element.contentEditable && element.contentEditable == "true");
 
   if (!isText && element.contentEditable == "inherit") {
