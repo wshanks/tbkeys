@@ -79,6 +79,20 @@ function stopCallback(e, element, combo, seq) {
     }
   }
 
+  // The event target can be a container of a nested document (e.g. the
+  // Thunderbird Conversations quick reply), so also check the element that
+  // really has focus.
+  let focused = Services.focus.focusedElement;
+  if (!isText && focused && focused !== element) {
+    let focusedTag = focused.localName.toLowerCase();
+    isText =
+      focusedTag == "input" ||
+      focusedTag == "textarea" ||
+      focusedTag == "select" ||
+      focused.isContentEditable ||
+      focused.ownerDocument.designMode == "on";
+  }
+
   let firstCombo = combo;
   if (seq !== undefined) {
     firstCombo = seq.trim().split(" ")[0];
